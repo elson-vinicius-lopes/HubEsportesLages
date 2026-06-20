@@ -1,0 +1,135 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Início";
+}
+
+<section class="hero">
+    <div class="container hero__inner">
+        <span class="hero__eyebrow">🏆 O esporte de Lages em um só lugar</span>
+        <h1>A agenda esportiva da Serra Catarinense, sempre com você.</h1>
+        <p class="lead">
+            Acompanhe jogos, corridas e competições de todas as modalidades, receba notificações
+            da sua equipe e nunca mais perca um evento esportivo na cidade de Lages.
+        </p>
+        <div class="hero__cta">
+            <a class="btn btn--primary" asp-controller="Agenda" asp-action="Index">📅 Ver agenda completa</a>
+            <a class="btn btn--ghost" asp-controller="Notificacoes" asp-action="Index">🔔 Ativar notificações</a>
+        </div>
+
+        <form class="hero__search" asp-controller="Agenda" asp-action="Index" method="get">
+            <input type="search" name="Busca" placeholder="Buscar por time, campeonato ou evento..." />
+            <button class="btn btn--amber" type="submit">Buscar</button>
+        </form>
+
+        <div class="hero__stats">
+            <div class="hero__stat"><strong>@Model.TotalEventosFuturos</strong><span>eventos na agenda</span></div>
+            <div class="hero__stat"><strong>@Model.Modalidades.Count</strong><span>modalidades</span></div>
+            <div class="hero__stat"><strong>@Model.TotalInscritos</strong><span>torcedores inscritos</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="section--tight">
+    <div class="container">
+        <div class="sec-head">
+            <div>
+                <h2>Modalidades</h2>
+                <p>Filtre a agenda pela modalidade do seu interesse.</p>
+            </div>
+        </div>
+        <div class="modalidades">
+            @foreach (var m in Model.Modalidades)
+            {
+                <a class="mod-chip" asp-controller="Agenda" asp-action="Index" asp-route-Modalidade="@m.Slug">
+                    <span class="mod-chip__icon" style="background:@m.CorHex">@m.Icone</span>
+                    <span>@m.Nome<br /><span class="mod-chip__count">@m.EventosFuturos evento(s)</span></span>
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+@if (Model.AoVivo.Any())
+{
+    <section class="section--tight">
+        <div class="container">
+            <div class="sec-head">
+                <div><h2>🔴 Acontecendo agora</h2><p>Eventos ao vivo neste momento.</p></div>
+            </div>
+            <div class="grid">
+                @foreach (var e in Model.AoVivo)
+                {
+                    <partial name="_CardEvento" model="e" />
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<section class="section--tight">
+    <div class="container">
+        <div class="sec-head">
+            <div><h2>⭐ Destaques</h2><p>Os principais eventos esportivos chegando em Lages.</p></div>
+            <a class="sec-head__link" asp-controller="Agenda" asp-action="Index">Ver tudo →</a>
+        </div>
+        @if (Model.Destaques.Any())
+        {
+            <div class="grid">
+                @foreach (var e in Model.Destaques)
+                {
+                    <partial name="_CardEvento" model="e" />
+                }
+            </div>
+        }
+        else
+        {
+            <div class="vazio"><span class="icone">📭</span> Nenhum destaque no momento.</div>
+        }
+    </div>
+</section>
+
+<section class="section--tight">
+    <div class="container">
+        <div class="sec-head">
+            <div><h2>📅 Próximos eventos</h2><p>A sequência da agenda esportiva da cidade.</p></div>
+            <a class="sec-head__link" asp-controller="Agenda" asp-action="Index">Agenda completa →</a>
+        </div>
+        <div class="grid">
+            @foreach (var e in Model.Proximos)
+            {
+                <partial name="_CardEvento" model="e" />
+            }
+        </div>
+    </div>
+</section>
+
+<section class="section--tight">
+    <div class="container" style="display:grid; gap:26px; grid-template-columns: 1.4fr 1fr; align-items:start;">
+        <div>
+            <div class="sec-head">
+                <div><h2>🔔 Últimas notificações</h2></div>
+                <a class="sec-head__link" asp-controller="Notificacoes" asp-action="Index">Ver feed →</a>
+            </div>
+            <div class="feed">
+                @foreach (var n in Model.Notificacoes)
+                {
+                    <div class="feed-item @TipoClasse(n.Tipo)">
+                        <div class="feed-item__icone" style="background:@TipoCor(n.Tipo)">@TipoIcone(n.Tipo)</div>
+                        <div class="feed-item__corpo">
+                            <div class="feed-item__topo">
+                                <p class="feed-item__titulo">@n.Titulo</p>
+                                <span class="feed-item__hora">@TempoRelativo(n.CriadoEm)</span>
+                            </div>
+                            <p class="feed-item__msg">@n.Mensagem</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="cta" style="margin-top:42px;">
+            <h2>Não perca nenhum jogo 💚</h2>
+            <p>Inscreva-se e receba alertas de novos eventos, lembretes e resultados da sua equipe direto no hub.</p>
+            <a class="btn btn--primary" asp-controller="Notificacoes" asp-action="Index">Quero receber alertas</a>
+        </div>
+    </div>
+</section>

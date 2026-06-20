@@ -1,0 +1,16 @@
+name: spec-ci
+on: [push, pull_request]
+jobs:
+  build-and-specs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Validar estrutura das specs e adaptadores
+        run: bash scripts/check-specs.sh
+      - name: Build da solução
+        run: dotnet build HubEsportesLages.slnx -warnaserror
+      # - name: Testes (habilitar quando houver projeto de testes)
+      #   run: dotnet test HubEsportesLages.slnx

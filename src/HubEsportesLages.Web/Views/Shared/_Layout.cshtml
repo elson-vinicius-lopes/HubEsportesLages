@@ -1,0 +1,94 @@
+@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    string Ativo(string c) => string.Equals(controller, c, StringComparison.OrdinalIgnoreCase) ? "active" : "";
+}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(ViewData["Title"] is null ? "Hub Esportes Lages" : ViewData["Title"] + " · Hub Esportes Lages")</title>
+    <meta name="description" content="Hub central de agenda e notificações dos esportes de Lages/SC. Acompanhe jogos, resultados e ative alertas da sua equipe." />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="topbar">
+        <div class="container">
+            <span>📍 Lages · Serra Catarinense</span>
+            <div class="topbar__links">
+                <a asp-controller="Notificacoes" asp-action="Index">🔔 Notificações</a>
+                <a href="/swagger" target="_blank" rel="noopener">API</a>
+                <a asp-controller="Admin" asp-action="Index">Área do organizador</a>
+            </div>
+        </div>
+    </div>
+
+    <header class="site-header">
+        <div class="container">
+            <nav class="nav">
+                <a class="brand" asp-controller="Home" asp-action="Index">
+                    <span class="brand__logo">🏟️</span>
+                    <span>Hub Esportes <span class="brand__sub">Lages · SC</span></span>
+                </a>
+                <button class="nav__toggle" id="navToggle" aria-label="Abrir menu">☰</button>
+                <div class="nav__links" id="navLinks">
+                    <a class="@Ativo("Home")" asp-controller="Home" asp-action="Index">Início</a>
+                    <a class="@Ativo("Agenda")" asp-controller="Agenda" asp-action="Index">Agenda</a>
+                    <a class="@Ativo("Resultados")" asp-controller="Resultados" asp-action="Index">Resultados</a>
+                    <a class="@Ativo("Notificacoes")" asp-controller="Notificacoes" asp-action="Index">Notificações</a>
+                    <a class="@Ativo("Admin")" asp-controller="Admin" asp-action="Index">Organizador</a>
+                </div>
+                <div class="nav__spacer"></div>
+                <a class="btn btn--primary btn--sm" asp-controller="Notificacoes" asp-action="Index">🔔 Receber alertas</a>
+            </nav>
+        </div>
+    </header>
+
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand"><span class="brand__logo">🏟️</span> Hub Esportes Lages</div>
+                    <p>O hub central da agenda esportiva de Lages. Reunimos jogos, corridas e competições de todas as modalidades para aproximar o torcedor das equipes da cidade.</p>
+                    <div class="footer-social">
+                        <a href="#" title="Instagram" aria-label="Instagram">📷</a>
+                        <a href="#" title="WhatsApp" aria-label="WhatsApp">💬</a>
+                        <a href="#" title="Facebook" aria-label="Facebook">👍</a>
+                    </div>
+                </div>
+                <div>
+                    <h4>Navegar</h4>
+                    <a asp-controller="Agenda" asp-action="Index">Agenda</a>
+                    <a asp-controller="Resultados" asp-action="Index">Resultados</a>
+                    <a asp-controller="Notificacoes" asp-action="Index">Notificações</a>
+                    <a asp-controller="Admin" asp-action="Index">Organizadores</a>
+                </div>
+                <div>
+                    <h4>Recursos</h4>
+                    <a href="/swagger" target="_blank" rel="noopener">API pública</a>
+                    <a asp-controller="Agenda" asp-action="Index" asp-route-Periodo="Hoje">Jogos de hoje</a>
+                    <a asp-controller="Agenda" asp-action="Index" asp-route-Periodo="Semana">Esta semana</a>
+                </div>
+                <div>
+                    <h4>Contato</h4>
+                    <a href="mailto:contato@hubesporteslages.sc">contato@hubesporteslages.sc</a>
+                    <a href="tel:+554932220000">(49) 3222-0000</a>
+                    <span>Fundação Municipal de Esportes</span>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Hub Esportes Lages · Projeto HackathOrion</span>
+                <span>Feito para a comunidade esportiva da Serra 💚</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

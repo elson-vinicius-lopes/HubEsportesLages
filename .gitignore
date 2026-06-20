@@ -1,0 +1,19 @@
+# Build
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+
+# .NET / Rider / VS
+.vs/
+.idea/
+*.suo
+
+# Banco SQLite gerado em runtime
+*.db
+*.db-shm
+*.db-wal
+
+# Logs
+*.log

@@ -1,0 +1,69 @@
+@model EventoResumoDto
+@{
+    var capaStyle = $"background: linear-gradient(135deg, {Model.ModalidadeCor}, var(--azul-800));";
+}
+<article class="card-evento">
+    <div class="card-evento__capa" style="@capaStyle">
+        <span class="card-evento__mod">@Model.ModalidadeIcone @Model.ModalidadeNome</span>
+        <span class="icone">@Model.ModalidadeIcone</span>
+    </div>
+    <div class="card-evento__corpo">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+            @if (!string.IsNullOrWhiteSpace(Model.Campeonato))
+            {
+                <span class="card-evento__camp">@Model.Campeonato</span>
+            }
+            @if (Model.Status == StatusEvento.AoVivo)
+            {
+                <span class="badge badge--aovivo"><span class="dot"></span> AO VIVO</span>
+            }
+            else
+            {
+                <span class="badge @StatusClasse(Model.Status)">@StatusTexto(Model.Status)</span>
+            }
+        </div>
+
+        <h3 class="card-evento__titulo">
+            <a asp-controller="Agenda" asp-action="Evento" asp-route-slug="@Model.Slug">@Model.Titulo</a>
+        </h3>
+
+        @if (Model.EhConfronto)
+        {
+            <div class="confronto">
+                <div class="confronto__time">
+                    <span class="confronto__escudo">@Model.EquipeCasaEscudo</span>
+                    <span class="confronto__sigla">@Model.EquipeCasa</span>
+                </div>
+                @if (Model.Placar is not null)
+                {
+                    <span class="confronto__placar">@Model.Placar</span>
+                }
+                else
+                {
+                    <span class="confronto__vs">VS</span>
+                }
+                <div class="confronto__time">
+                    <span class="confronto__escudo">@Model.EquipeVisitanteEscudo</span>
+                    <span class="confronto__sigla">@Model.EquipeVisitante</span>
+                </div>
+            </div>
+        }
+
+        <div class="card-evento__meta">
+            <span class="linha">📅 @DataCurta(Model.Inicio) · @Hora(Model.Inicio)</span>
+            <span class="linha">📍 @Model.LocalNome@(string.IsNullOrWhiteSpace(Model.Bairro) ? "" : $" · {Model.Bairro}")</span>
+        </div>
+
+        <div class="card-evento__rodape">
+            @if (Model.Gratuito)
+            {
+                <span class="badge badge--gratis">Entrada gratuita</span>
+            }
+            else
+            {
+                <span class="badge badge--pago">@(Model.PrecoIngresso is decimal p ? Moeda(p) : "Pago")</span>
+            }
+            <a class="btn btn--outline btn--sm" asp-controller="Agenda" asp-action="Evento" asp-route-slug="@Model.Slug">Detalhes →</a>
+        </div>
+    </div>
+</article>

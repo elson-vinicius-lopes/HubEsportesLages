@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "hub-web",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": [
+        "run",
+        "--project",
+        "src/HubEsportesLages.Web/HubEsportesLages.Web.csproj",
+        "--no-launch-profile",
+        "--urls",
+        "http://localhost:5210"
+      ],
+      "port": 5210
+    }
+  ]
+}

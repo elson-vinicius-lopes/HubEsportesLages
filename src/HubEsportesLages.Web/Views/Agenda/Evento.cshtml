@@ -1,0 +1,106 @@
+@model EventoDetalheDto
+@{
+    ViewData["Title"] = Model.Titulo;
+    var heroStyle = $"background: linear-gradient(135deg, {Model.ModalidadeCor}, var(--azul-800));";
+}
+
+<section class="detalhe-hero" style="@heroStyle">
+    <div class="container">
+        <a asp-controller="Agenda" asp-action="Index" style="color:#d6e0ee; font-weight:600;">← Voltar para a agenda</a>
+        <div style="display:flex; gap:10px; align-items:center; margin:14px 0 8px;">
+            <span class="card-evento__mod" style="position:static; background:rgba(255,255,255,.2);">@Model.ModalidadeIcone @Model.ModalidadeNome</span>
+            @if (Model.Status == StatusEvento.AoVivo)
+            {
+                <span class="badge badge--aovivo"><span class="dot"></span> AO VIVO</span>
+            }
+            else
+            {
+                <span class="badge @StatusClasse(Model.Status)">@StatusTexto(Model.Status)</span>
+            }
+        </div>
+        <h1 style="max-width:24ch;">@Model.Titulo</h1>
+        @if (!string.IsNullOrWhiteSpace(Model.Campeonato))
+        {
+            <p class="lead" style="color:#d6e0ee; margin:0;">🏆 @Model.Campeonato</p>
+        }
+    </div>
+</section>
+
+<section class="section--tight">
+    <div class="container detalhe-grid">
+        <div style="display:flex; flex-direction:column; gap:22px;">
+
+            @if (Model.EhConfronto)
+            {
+                <div class="painel">
+                    <div class="placar-grande">
+                        <div class="placar-grande__time">
+                            <div class="placar-grande__escudo">@Model.EquipeCasaEscudo</div>
+                            <div class="placar-grande__nome">@Model.EquipeCasa</div>
+                        </div>
+                        @if (Model.Placar is not null)
+                        {
+                            <div class="placar-grande__num">@Model.PlacarCasa</div>
+                            <div class="placar-grande__x">×</div>
+                            <div class="placar-grande__num">@Model.PlacarVisitante</div>
+                        }
+                        else
+                        {
+                            <div class="placar-grande__x">VS</div>
+                        }
+                        <div class="placar-grande__time">
+                            <div class="placar-grande__escudo">@Model.EquipeVisitanteEscudo</div>
+                            <div class="placar-grande__nome">@Model.EquipeVisitante</div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="painel">
+                <h3>Sobre o evento</h3>
+                <p class="muted" style="margin:0; white-space:pre-line;">@Model.Descricao</p>
+            </div>
+
+            <div class="painel">
+                <h3>📍 Como chegar</h3>
+                <p class="muted">@Model.LocalNome — @Model.LocalEndereco@(string.IsNullOrWhiteSpace(Model.Bairro) ? "" : $", {Model.Bairro}"), Lages/SC.</p>
+                <a class="btn btn--outline" href="@Model.MapaUrl" target="_blank" rel="noopener">Abrir no Google Maps →</a>
+            </div>
+        </div>
+
+        <aside style="display:flex; flex-direction:column; gap:22px;">
+            <div class="painel">
+                <ul class="info-list">
+                    <li><span class="ic">📅</span><div><div class="rot">Data e hora</div><div class="val">@DataLonga(Model.Inicio)</div></div></li>
+                    <li><span class="ic">📍</span><div><div class="rot">Local</div><div class="val">@Model.LocalNome</div></div></li>
+                    @if (Model.Capacidade is int cap)
+                    {
+                        <li><span class="ic">👥</span><div><div class="rot">Capacidade</div><div class="val">@cap.ToString("N0") lugares</div></div></li>
+                    }
+                    <li>
+                        <span class="ic">🎟️</span>
+                        <div>
+                            <div class="rot">Ingresso</div>
+                            <div class="val">
+                                @if (Model.Gratuito)
+                                {
+                                    <span class="badge badge--gratis">Entrada gratuita</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge--pago">@(Model.PrecoIngresso is decimal p ? Moeda(p) : "Pago")</span>
+                                }
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="cta">
+                <h2 style="font-size:1.3rem;">🔔 Avise-me</h2>
+                <p style="margin-bottom:16px;">Receba um lembrete antes do início e o resultado deste evento.</p>
+                <a class="btn btn--primary btn--block" asp-controller="Notificacoes" asp-action="Index">Ativar notificações</a>
+            </div>
+        </aside>
+    </div>
+</section>

@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/HubEsportesLages.Application/HubEsportesLages.Application.csproj" />
+    <Project Path="src/HubEsportesLages.Domain/HubEsportesLages.Domain.csproj" />
+    <Project Path="src/HubEsportesLages.Infrastructure/HubEsportesLages.Infrastructure.csproj" />
+    <Project Path="src/HubEsportesLages.Web/HubEsportesLages.Web.csproj" />
+  </Folder>
+</Solution>

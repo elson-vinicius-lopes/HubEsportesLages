@@ -1,0 +1,129 @@
+@model AgendaViewModel
+@{
+    ViewData["Title"] = Model.Titulo;
+    var ctrl = ViewContext.RouteData.Values["controller"]?.ToString() ?? "Agenda";
+    var f = Model.Filtro;
+    var periodos = new (PeriodoAgenda Valor, string Rotulo)[]
+    {
+        (PeriodoAgenda.Proximos, "Próximos"),
+        (PeriodoAgenda.Hoje, "Hoje"),
+        (PeriodoAgenda.Semana, "Esta semana"),
+        (PeriodoAgenda.Mes, "Este mês"),
+        (PeriodoAgenda.Todos, "Todos"),
+    };
+}
+
+<section class="detalhe-hero" style="background: linear-gradient(135deg, var(--azul-900), var(--azul-700));">
+    <div class="container">
+        <h1>@Model.Titulo</h1>
+        <p class="lead" style="color:#d6e0ee; margin:0;">@Model.Subtitulo</p>
+    </div>
+</section>
+
+<section class="section--tight">
+    <div class="container">
+
+        <div class="filtros" data-auto-submit>
+            <form asp-controller="@ctrl" asp-action="Index" method="get">
+                <input type="hidden" name="Periodo" value="@f.Periodo" />
+                <div class="campo">
+                    <label for="Busca">Buscar</label>
+                    <input id="Busca" type="search" name="Busca" value="@f.Busca" placeholder="Time, campeonato ou evento..." />
+                </div>
+                <div class="campo">
+                    <label for="Modalidade">Modalidade</label>
+                    <select id="Modalidade" name="Modalidade">
+                        <option value="">Todas</option>
+                        @foreach (var m in Model.Modalidades)
+                        {
+                            <option value="@m.Slug" selected="@(f.Modalidade == m.Slug)">@m.Icone @m.Nome</option>
+                        }
+                    </select>
+                </div>
+                <div class="campo">
+                    <label for="LocalId">Local</label>
+                    <select id="LocalId" name="LocalId">
+                        <option value="">Todos</option>
+                        @foreach (var l in Model.Locais)
+                        {
+                            <option value="@l.Id" selected="@(f.LocalId == l.Id)">@l.Nome</option>
+                        }
+                    </select>
+                </div>
+                <button class="btn btn--primary" type="submit">Filtrar</button>
+            </form>
+        </div>
+
+        @if (!Model.ModoResultados)
+        {
+            <div class="chips-periodo">
+                @foreach (var p in periodos)
+                {
+                    <a class="chip-periodo @(f.Periodo == p.Valor ? "active" : "")"
+                       asp-controller="@ctrl" asp-action="Index"
+                       asp-route-Periodo="@p.Valor"
+                       asp-route-Modalidade="@f.Modalidade"
+                       asp-route-Busca="@f.Busca"
+                       asp-route-LocalId="@f.LocalId">@p.Rotulo</a>
+                }
+            </div>
+        }
+
+        <div class="sec-head">
+            <p class="muted">
+                <strong>@Model.Eventos.Total</strong> evento(s) encontrado(s)
+                @if (!string.IsNullOrWhiteSpace(f.Modalidade)) { <text>· filtrando por modalidade</text> }
+            </p>
+        </div>
+
+        @if (Model.Eventos.Itens.Any())
+        {
+            <div class="grid">
+                @foreach (var e in Model.Eventos.Itens)
+                {
+                    <partial name="_CardEvento" model="e" />
+                }
+            </div>
+
+            @if (Model.Eventos.TotalPaginas > 1)
+            {
+                <nav class="paginacao">
+                    <a class="@(Model.Eventos.TemAnterior ? "" : "disabled")"
+                       asp-controller="@ctrl" asp-action="Index"
+                       asp-route-Pagina="@(Model.Eventos.Pagina - 1)"
+                       asp-route-Periodo="@f.Periodo" asp-route-Modalidade="@f.Modalidade"
+                       asp-route-Busca="@f.Busca" asp-route-LocalId="@f.LocalId">←</a>
+
+                    @for (var i = 1; i <= Model.Eventos.TotalPaginas; i++)
+                    {
+                        if (i == Model.Eventos.Pagina)
+                        {
+                            <span class="atual">@i</span>
+                        }
+                        else
+                        {
+                            <a asp-controller="@ctrl" asp-action="Index"
+                               asp-route-Pagina="@i"
+                               asp-route-Periodo="@f.Periodo" asp-route-Modalidade="@f.Modalidade"
+                               asp-route-Busca="@f.Busca" asp-route-LocalId="@f.LocalId">@i</a>
+                        }
+                    }
+
+                    <a class="@(Model.Eventos.TemProxima ? "" : "disabled")"
+                       asp-controller="@ctrl" asp-action="Index"
+                       asp-route-Pagina="@(Model.Eventos.Pagina + 1)"
+                       asp-route-Periodo="@f.Periodo" asp-route-Modalidade="@f.Modalidade"
+                       asp-route-Busca="@f.Busca" asp-route-LocalId="@f.LocalId">→</a>
+                </nav>
+            }
+        }
+        else
+        {
+            <div class="vazio">
+                <span class="icone">🔍</span>
+                Nenhum evento encontrado com os filtros atuais.
+                <div style="margin-top:14px;"><a class="btn btn--outline" asp-controller="@ctrl" asp-action="Index">Limpar filtros</a></div>
+            </div>
+        }
+    </div>
+</section>

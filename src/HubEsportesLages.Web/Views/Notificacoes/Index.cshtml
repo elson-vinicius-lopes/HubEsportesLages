@@ -1,0 +1,116 @@
+@model NotificacoesViewModel
+@{
+    ViewData["Title"] = "Notificações";
+}
+
+<section class="detalhe-hero" style="background: linear-gradient(135deg, var(--azul-900), var(--verde));">
+    <div class="container">
+        <h1>🔔 Central de notificações</h1>
+        <p class="lead" style="color:#e6f4ec; margin:0;">
+            Acompanhe novos eventos, lembretes e resultados — e inscreva-se para receber alertas da sua equipe.
+        </p>
+    </div>
+</section>
+
+<section class="section--tight">
+    <div class="container" style="display:grid; gap:26px; grid-template-columns: 1.5fr 1fr; align-items:start;">
+
+        <div>
+            @if (TempData["InscricaoOk"] is string ok)
+            {
+                <div class="alerta alerta--ok">✅ @ok</div>
+            }
+
+            <div class="sec-head">
+                <div><h2>Feed do hub</h2><p>As atualizações mais recentes da agenda esportiva.</p></div>
+                <form asp-action="MarcarLidas" method="post">
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn--outline btn--sm" type="submit">Marcar todas como lidas</button>
+                </form>
+            </div>
+
+            @if (Model.Notificacoes.Any())
+            {
+                <div class="feed">
+                    @foreach (var n in Model.Notificacoes)
+                    {
+                        <div class="feed-item @TipoClasse(n.Tipo) @(n.Lida ? "" : "nao-lida")">
+                            <div class="feed-item__icone" style="background:@TipoCor(n.Tipo)">@TipoIcone(n.Tipo)</div>
+                            <div class="feed-item__corpo">
+                                <div class="feed-item__topo">
+                                    <p class="feed-item__titulo">@n.Titulo</p>
+                                    <span class="feed-item__hora">@TempoRelativo(n.CriadoEm)</span>
+                                </div>
+                                <p class="feed-item__msg">@n.Mensagem</p>
+                                @if (n.EventoSlug is not null)
+                                {
+                                    <a class="btn btn--outline btn--sm" style="margin-top:8px;"
+                                       asp-controller="Agenda" asp-action="Evento" asp-route-slug="@n.EventoSlug">Ver evento →</a>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="vazio"><span class="icone">📭</span> Nenhuma notificação ainda.</div>
+            }
+        </div>
+
+        <aside>
+            <div class="painel">
+                <h3>Inscreva-se nos alertas</h3>
+                <p class="muted" style="margin-top:-4px;">Já são <strong>@Model.TotalInscritos</strong> torcedores inscritos.</p>
+
+                <form asp-action="Inscrever" method="post" class="form-grid" style="margin-top:12px;">
+                    @Html.AntiForgeryToken()
+                    <div class="campo col-full">
+                        <label asp-for="Inscricao.Nome">Nome</label>
+                        <input asp-for="Inscricao.Nome" placeholder="Seu nome" />
+                        <span asp-validation-for="Inscricao.Nome" class="text-erro"></span>
+                    </div>
+                    <div class="campo col-full">
+                        <label asp-for="Inscricao.Email">E-mail</label>
+                        <input asp-for="Inscricao.Email" placeholder="voce@email.com" />
+                        <span asp-validation-for="Inscricao.Email" class="text-erro"></span>
+                    </div>
+                    <div class="campo col-full">
+                        <label asp-for="Inscricao.Telefone">Telefone (opcional)</label>
+                        <input asp-for="Inscricao.Telefone" placeholder="(49) 9 9999-9999" />
+                        <span asp-validation-for="Inscricao.Telefone" class="text-erro"></span>
+                    </div>
+                    <div class="campo">
+                        <label asp-for="Inscricao.ModalidadeId">Modalidade</label>
+                        <select asp-for="Inscricao.ModalidadeId">
+                            <option value="">Todas</option>
+                            @foreach (var m in Model.Modalidades)
+                            {
+                                <option value="@m.Id">@m.Icone @m.Nome</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="campo">
+                        <label asp-for="Inscricao.EquipeId">Equipe</label>
+                        <select asp-for="Inscricao.EquipeId">
+                            <option value="">Todas</option>
+                            @foreach (var e in Model.Equipes)
+                            {
+                                <option value="@e.Id">@e.Escudo @e.Nome</option>
+                            }
+                        </select>
+                    </div>
+                    <label class="check col-full"><input asp-for="Inscricao.ReceberEmail" type="checkbox" /> Receber por e-mail</label>
+                    <label class="check col-full"><input asp-for="Inscricao.ReceberPush" type="checkbox" /> Receber notificações push</label>
+                    <div class="col-full">
+                        <button class="btn btn--primary btn--block" type="submit">🔔 Quero ser notificado</button>
+                    </div>
+                </form>
+            </div>
+        </aside>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
