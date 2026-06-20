@@ -50,8 +50,8 @@
         }
 
         <div class="card-evento__meta">
-            <span class="linha">📅 @DataCurta(Model.Inicio) · @Hora(Model.Inicio)</span>
-            <span class="linha">📍 @Model.LocalNome@(string.IsNullOrWhiteSpace(Model.Bairro) ? "" : $" · {Model.Bairro}")</span>
+            <span class="linha">@DataCurta(Model.Inicio) · @Hora(Model.Inicio)</span>
+            <span class="linha">@Model.LocalNome@(string.IsNullOrWhiteSpace(Model.Bairro) ? "" : $" · {Model.Bairro}")</span>
         </div>
 
         <div class="card-evento__rodape">

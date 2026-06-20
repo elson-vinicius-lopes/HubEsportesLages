@@ -40,12 +40,12 @@ public static class Formatador
 
     public static string TipoIcone(TipoNotificacao t) => t switch
     {
-        TipoNotificacao.NovoEvento => "📅",
-        TipoNotificacao.Lembrete => "⏰",
-        TipoNotificacao.AlteracaoHorario => "🔁",
-        TipoNotificacao.Resultado => "🏁",
-        TipoNotificacao.Cancelamento => "🚫",
-        _ => "🔔"
+        TipoNotificacao.NovoEvento => "[Evento]",
+        TipoNotificacao.Lembrete => "[Lembrete]",
+        TipoNotificacao.AlteracaoHorario => "[Alteração]",
+        TipoNotificacao.Resultado => "[Resultado]",
+        TipoNotificacao.Cancelamento => "[Cancelamento]",
+        _ => "[Notif.]"
     };
 
     public static string TipoCor(TipoNotificacao t) => t switch

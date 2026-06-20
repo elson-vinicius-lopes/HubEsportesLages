@@ -1,14 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
 /* ============================================================
-   Hub Esportes Lages — Design System
-   Tema esportivo da Serra Catarinense (azul-noite + verde + âmbar)
+   Bora pro Jogo — Design System
+   Tema esportivo de Lages (azul-vibrante + limão + âmbar)
    ============================================================ */
 :root {
-    --azul-900: #0a1f3c;
-    --azul-800: #0b2545;
-    --azul-700: #13315c;
-    --azul-600: #1d4e89;
-    --verde: #16a34a;
-    --verde-claro: #22c55e;
+    --azul-900: #06073b;
+    --azul-800: #0a0b5c;
+    --azul-700: #1012b5;
+    --azul-600: #1D20E8;
+    --verde: #C2EF4E;
+    --verde-claro: #d6fa6b;
     --ambar: #f59e0b;
     --vermelho: #dc2626;
     --roxo: #7c3aed;
@@ -28,7 +30,7 @@
     --raio-sm: 10px;
     --container: 1180px;
 
-    --fonte: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    --fonte: "Space Grotesk", "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
 * { box-sizing: border-box; }
@@ -92,7 +94,7 @@ h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .5rem; font-weight: 700; letter-s
     padding: 9px 14px; border-radius: 10px; transition: background .15s, color .15s;
 }
 .nav__links a:hover { background: rgba(255,255,255,.10); color: #fff; }
-.nav__links a.active { background: var(--verde); color: #fff; }
+.nav__links a.active { background: var(--verde); color: var(--azul-900); }
 
 .nav__spacer { flex: 1; }
 
@@ -107,8 +109,8 @@ h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .5rem; font-weight: 700; letter-s
     white-space: nowrap;
 }
 .btn:active { transform: translateY(1px); }
-.btn--primary { background: var(--verde); color: #fff; }
-.btn--primary:hover { background: var(--verde-claro); color: #fff; box-shadow: 0 8px 20px rgba(22,163,74,.35); }
+.btn--primary { background: var(--verde); color: var(--azul-900); }
+.btn--primary:hover { background: var(--verde-claro); color: var(--azul-900); box-shadow: 0 8px 20px rgba(194,239,78,.35); }
 .btn--amber { background: var(--ambar); color: #1f2937; }
 .btn--amber:hover { background: #fbbf24; color: #1f2937; }
 .btn--light { background: #fff; color: var(--azul-700); }
@@ -323,7 +325,7 @@ h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .5rem; font-weight: 700; letter-s
 .footer-brand { display: flex; align-items: center; gap: 12px; color: #fff; font-weight: 800; font-size: 1.15rem; margin-bottom: 12px; }
 .footer-social { display: flex; gap: 10px; margin-top: 12px; }
 .footer-social a { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,.08); display: grid; place-items: center; font-size: 1.1rem; }
-.footer-social a:hover { background: var(--verde); }
+.footer-social a:hover { background: var(--verde); color: var(--azul-900); }
 .footer-bottom { border-top: 1px solid rgba(255,255,255,.1); margin-top: 32px; padding-top: 18px; font-size: .82rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
 
 /* --------------------------------------------------- CTA banner */
@@ -350,4 +352,326 @@ h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .5rem; font-weight: 700; letter-s
     .filtros form { grid-template-columns: 1fr; }
     .footer-grid { grid-template-columns: 1fr; }
     .hero__inner { padding: 52px 0 44px; }
+}
+
+/* --------------------------------------------------- Torcida Interativa */
+.torcida-opcoes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.torcida-opcao {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: var(--surface-2);
+    border: 1.5px solid var(--borda);
+    border-radius: var(--raio-sm);
+    color: var(--texto);
+    font-family: var(--fonte);
+    font-weight: 700;
+    font-size: 0.96rem;
+    cursor: pointer;
+    overflow: hidden;
+    text-align: left;
+    transition: transform 0.2s, border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+    min-height: 56px;
+}
+
+.torcida-opcao:hover:not(:disabled) {
+    transform: translateY(-2px);
+    border-color: var(--azul-600);
+    box-shadow: var(--sombra-sm);
+}
+
+.torcida-opcao:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+/* Estado de opção ativa */
+.torcida-opcao.torcida-opcao--ativa {
+    background: var(--azul-800);
+    border-color: var(--azul-600);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(29, 32, 232, 0.15);
+}
+
+.torcida-opcao.torcida-opcao--ativa .muted {
+    color: #cbd5e1 !important;
+}
+
+.torcida-opcao.torcida-opcao--ativa .torcida-opcao__votos {
+    color: var(--verde) !important;
+}
+
+.torcida-opcao:disabled {
+    cursor: default;
+}
+
+.torcida-opcao__votos {
+    font-weight: 800;
+    color: var(--azul-600);
+    z-index: 2;
+}
+
+/* Barra de progresso para a enquete */
+.torcida-opcao .torcida-barra {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.torcida-opcao .torcida-barra__fill {
+    display: block;
+    height: 100%;
+    background: rgba(29, 32, 232, 0.08);
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.torcida-opcao > span:not(.torcida-barra) {
+    position: relative;
+    z-index: 2;
+}
+
+/* Form do Mural */
+#muralForm {
+    display: flex;
+    gap: 10px;
+    margin: 0 0 16px;
+}
+
+#muralTexto {
+    flex: 1;
+    padding: 14px 16px;
+    border: 1.5px solid var(--borda);
+    border-radius: var(--raio-sm);
+    font-family: var(--fonte);
+    font-size: 0.96rem;
+    background: var(--surface-2);
+    color: var(--texto);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#muralTexto:focus {
+    outline: none;
+    border-color: var(--azul-600);
+    box-shadow: 0 0 0 3px rgba(29, 32, 232, 0.12);
+}
+
+#muralBtn {
+    padding: 14px 24px;
+    font-size: 0.96rem;
+    border-radius: var(--raio-sm);
+}
+
+/* Mural mensagens */
+.torcida-msg {
+    background: var(--surface-2);
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+}
+
+.torcida-msg__autor {
+    display: block;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--azul-600);
+    margin-bottom: 2px;
+}
+
+.torcida-msg__texto {
+    font-size: 0.94rem;
+    color: var(--texto);
+}
+
+@media (max-width: 480px) {
+    .torcida-opcoes {
+        grid-template-columns: 1fr;
+    }
+    #muralForm {
+        flex-direction: column;
+    }
+    #muralBtn {
+        width: 100%;
+    }
+}
+
+/* --------------------------------------------------- Dashboard Admin */
+.dash-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    margin-bottom: 26px;
+}
+
+.dash-card {
+    background: var(--surface);
+    border: 1.5px solid var(--borda);
+    border-radius: var(--raio);
+    padding: 22px;
+    box-shadow: var(--sombra-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dash-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+}
+
+.dash-card__label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--texto-suave);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dash-card__value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--azul-600);
+    line-height: 1.1;
+}
+
+.dash-card__desc {
+    font-size: 0.86rem;
+    color: var(--texto-claro);
+}
+
+.heatmap-container {
+    background: var(--surface);
+    border: 1.5px solid var(--borda);
+    border-radius: var(--raio);
+    padding: 24px;
+    box-shadow: var(--sombra-sm);
+    margin-bottom: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.heatmap-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.heatmap-grid-wrapper {
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.heatmap-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(53, 14px);
+    grid-template-rows: repeat(7, 14px);
+    gap: 3px;
+    width: max-content;
+}
+
+.heatmap-day {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background-color: #f1f5f9;
+    transition: transform 0.1s;
+    cursor: pointer;
+}
+
+.heatmap-day:hover {
+    transform: scale(1.2);
+    z-index: 10;
+}
+
+.heatmap-day--level-0 { background-color: #f1f5f9; }
+.heatmap-day--level-1 { background-color: #d1d3fb; }
+.heatmap-day--level-2 { background-color: #8f92f6; }
+.heatmap-day--level-3 { background-color: #4e52ed; }
+.heatmap-day--level-4 { background-color: #1d20e8; }
+
+.heatmap-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    font-size: 0.76rem;
+    color: var(--texto-suave);
+}
+
+.heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.76rem;
+    color: var(--texto-suave);
+}
+
+.heatmap-legend-box {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.table-panel {
+    background: var(--surface);
+    border: 1.5px solid var(--borda);
+    border-radius: var(--raio);
+    padding: 24px;
+    box-shadow: var(--sombra-sm);
+    margin-bottom: 26px;
+}
+
+.dash-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 14px;
+    font-size: 0.94rem;
+}
+
+.dash-table th {
+    text-align: left;
+    padding: 12px;
+    font-weight: 700;
+    border-bottom: 2px solid var(--borda);
+    color: var(--texto-suave);
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+}
+
+.dash-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--borda);
+    color: var(--texto);
+}
+
+.dash-table tr:last-child td {
+    border-bottom: none;
+}
+
+.dash-table tr:hover td {
+    background-color: var(--surface-2);
+}
+
+.badge-participantes {
+    background: rgba(29, 32, 232, 0.08);
+    color: var(--azul-600);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.8rem;
 }

@@ -5,135 +5,262 @@
 
 <section class="detalhe-hero" style="background: linear-gradient(135deg, var(--azul-900), var(--azul-600));">
     <div class="container">
-        <h1>🛠️ Área do organizador</h1>
+        <h1>Área do organizador</h1>
         <p class="lead" style="color:#d6e0ee; margin:0;">
-            Publique eventos na agenda do hub. Ao salvar, uma notificação automática é enviada aos torcedores.
+            Publique eventos na agenda do Bora pro Jogo. Ao salvar, uma notificação automática é enviada aos torcedores.
         </p>
     </div>
 </section>
 
 <section class="section--tight">
-    <div class="container" style="display:grid; gap:26px; grid-template-columns: 1.5fr 1fr; align-items:start;">
+    <div class="container">
 
-        <div class="painel">
-            <h3>Publicar novo evento</h3>
-
-            @if (TempData["EventoOk"] is string ok)
-            {
-                <div class="alerta alerta--ok">✅ @ok</div>
-            }
-
-            <div asp-validation-summary="ModelOnly" class="text-erro"></div>
-
-            <form asp-action="Criar" method="post" class="form-grid">
-                @Html.AntiForgeryToken()
-
-                <div class="campo col-full">
-                    <label asp-for="Evento.Titulo">Título do evento</label>
-                    <input asp-for="Evento.Titulo" placeholder="Ex.: Lages FC x Guarani de Lages" />
-                    <span asp-validation-for="Evento.Titulo" class="text-erro"></span>
-                </div>
-
-                <div class="campo">
-                    <label asp-for="Evento.ModalidadeId">Modalidade</label>
-                    <select asp-for="Evento.ModalidadeId">
-                        <option value="">Selecione...</option>
-                        @foreach (var m in Model.Modalidades)
-                        {
-                            <option value="@m.Id">@m.Icone @m.Nome</option>
-                        }
-                    </select>
-                    <span asp-validation-for="Evento.ModalidadeId" class="text-erro"></span>
-                </div>
-                <div class="campo">
-                    <label asp-for="Evento.LocalId">Local</label>
-                    <select asp-for="Evento.LocalId">
-                        <option value="">Selecione...</option>
-                        @foreach (var l in Model.Locais)
-                        {
-                            <option value="@l.Id">@l.Nome</option>
-                        }
-                    </select>
-                    <span asp-validation-for="Evento.LocalId" class="text-erro"></span>
-                </div>
-
-                <div class="campo">
-                    <label asp-for="Evento.EquipeCasaId">Equipe mandante (opcional)</label>
-                    <select asp-for="Evento.EquipeCasaId">
-                        <option value="">—</option>
-                        @foreach (var e in Model.Equipes)
-                        {
-                            <option value="@e.Id">@e.Escudo @e.Nome</option>
-                        }
-                    </select>
-                </div>
-                <div class="campo">
-                    <label asp-for="Evento.EquipeVisitanteId">Equipe visitante (opcional)</label>
-                    <select asp-for="Evento.EquipeVisitanteId">
-                        <option value="">—</option>
-                        @foreach (var e in Model.Equipes)
-                        {
-                            <option value="@e.Id">@e.Escudo @e.Nome</option>
-                        }
-                    </select>
-                    <span asp-validation-for="Evento.EquipeVisitanteId" class="text-erro"></span>
-                </div>
-
-                <div class="campo col-full">
-                    <label asp-for="Evento.Campeonato">Campeonato</label>
-                    <input asp-for="Evento.Campeonato" placeholder="Ex.: Campeonato Citadino de Futebol 2026" />
-                </div>
-
-                <div class="campo">
-                    <label asp-for="Evento.Inicio">Início</label>
-                    <input asp-for="Evento.Inicio" type="datetime-local" />
-                    <span asp-validation-for="Evento.Inicio" class="text-erro"></span>
-                </div>
-                <div class="campo">
-                    <label asp-for="Evento.Fim">Término (opcional)</label>
-                    <input asp-for="Evento.Fim" type="datetime-local" />
-                </div>
-
-                <div class="campo col-full">
-                    <label asp-for="Evento.Descricao">Descrição</label>
-                    <input asp-for="Evento.Descricao" placeholder="Detalhes do evento, ingressos, observações..." />
-                </div>
-
-                <div class="campo">
-                    <label asp-for="Evento.PrecoIngresso">Preço do ingresso (R$)</label>
-                    <input asp-for="Evento.PrecoIngresso" type="number" step="0.01" min="0" placeholder="0,00" />
-                </div>
-                <div class="campo" style="justify-content:flex-end;">
-                    <label class="check"><input asp-for="Evento.Gratuito" type="checkbox" /> Evento gratuito</label>
-                    <label class="check"><input asp-for="Evento.Destaque" type="checkbox" /> Exibir em destaque</label>
-                </div>
-
-                <div class="col-full">
-                    <button class="btn btn--primary btn--block" type="submit">📢 Publicar na agenda</button>
-                </div>
-            </form>
+        <!-- ── DASHBOARD DE MÉTRICAS ── -->
+        <div class="dash-grid">
+            <div class="dash-card">
+                <span class="dash-card__label">Total de Eventos</span>
+                <span class="dash-card__value">@Model.Metricas.TotalEventos</span>
+                <span class="dash-card__desc">Na agenda do Bora pro Jogo</span>
+            </div>
+            <div class="dash-card">
+                <span class="dash-card__label">Inscrições Ativas</span>
+                <span class="dash-card__value">@Model.Metricas.TotalInscricoes</span>
+                <span class="dash-card__desc">Torcedores recebendo alertas</span>
+            </div>
+            <div class="dash-card">
+                <span class="dash-card__label">Torcedores Engajados</span>
+                <span class="dash-card__value">@Model.Metricas.TotalParticipantesAtivos</span>
+                <span class="dash-card__desc">Participações em enquetes/mural</span>
+            </div>
+            <div class="dash-card">
+                <span class="dash-card__label">Mensagens no Mural</span>
+                <span class="dash-card__value">@Model.Metricas.TotalMensagensMural</span>
+                <span class="dash-card__desc">Interações acumuladas</span>
+            </div>
         </div>
 
-        <aside>
-            <div class="painel">
-                <h3>Próximos publicados</h3>
-                <div class="feed">
-                    @foreach (var e in Model.Proximos)
+        <!-- ── MAPA SAZONAL ── -->
+        @{
+            var startSunday = DateTime.Today.AddDays(-364);
+            startSunday = startSunday.AddDays(-(int)startSunday.DayOfWeek);
+            var eventosDict = Model.Metricas.EventosPorDia.ToDictionary(m => m.Data.Date, m => m.QuantidadeEventos);
+        }
+        <div class="heatmap-container">
+            <div class="heatmap-header">
+                <h3 style="margin:0;">Mapa Sazonal de Eventos (Agenda Anual)</h3>
+                <div class="heatmap-legend">
+                    <span>Menos</span>
+                    <div class="heatmap-legend-box heatmap-day--level-0" title="0 eventos"></div>
+                    <div class="heatmap-legend-box heatmap-day--level-1" title="1 evento"></div>
+                    <div class="heatmap-legend-box heatmap-day--level-2" title="2 eventos"></div>
+                    <div class="heatmap-legend-box heatmap-day--level-3" title="3 eventos"></div>
+                    <div class="heatmap-legend-box heatmap-day--level-4" title="4+ eventos"></div>
+                    <span>Mais</span>
+                </div>
+            </div>
+            <div class="heatmap-grid-wrapper">
+                <div class="heatmap-grid">
+                    @for (int col = 0; col < 53; col++)
                     {
-                        <div class="feed-item feed-item--novoevento">
-                            <div class="feed-item__icone" style="background:@e.ModalidadeCor">@e.ModalidadeIcone</div>
-                            <div class="feed-item__corpo">
-                                <div class="feed-item__topo">
-                                    <p class="feed-item__titulo">@e.Titulo</p>
-                                    <span class="feed-item__hora">@DiaMes(e.Inicio)</span>
-                                </div>
-                                <p class="feed-item__msg">@e.LocalNome · @Hora(e.Inicio)</p>
-                            </div>
-                        </div>
+                        for (int row = 0; row < 7; row++)
+                        {
+                            var currentDate = startSunday.AddDays(col * 7 + row);
+                            var count = eventosDict.TryGetValue(currentDate, out var c) ? c : 0;
+                            var level = count switch
+                            {
+                                0 => 0,
+                                1 => 1,
+                                2 => 2,
+                                3 => 3,
+                                _ => 4
+                            };
+                            var isFuture = currentDate > DateTime.Today;
+                            var levelClass = isFuture ? "heatmap-day--level-0" : $"heatmap-day--level-{level}";
+                            var tooltipText = $"{currentDate:dd/MM/yyyy}: {(isFuture ? "Sem eventos (futuro)" : $"{count} evento(s)")}";
+                            
+                            <div class="heatmap-day @levelClass" title="@tooltipText"></div>
+                        }
                     }
                 </div>
             </div>
-        </aside>
+            <div class="heatmap-labels">
+                <span>@startSunday.ToString("MMM/yyyy")</span>
+                <span>@startSunday.AddMonths(3).ToString("MMM/yyyy")</span>
+                <span>@startSunday.AddMonths(6).ToString("MMM/yyyy")</span>
+                <span>@startSunday.AddMonths(9).ToString("MMM/yyyy")</span>
+                <span>Hoje (@DateTime.Today.ToString("dd/MM"))</span>
+            </div>
+        </div>
+
+        <!-- ── TABELA DE ENGAJAMENTO POR EVENTO (PESSOAS NO EVENTO) ── -->
+        <div class="table-panel">
+            <h3 style="margin:0 0 6px;">Pessoas no Evento (Participação Ativa)</h3>
+            <p class="muted" style="margin:0 0 16px;">Quantidade de torcedores únicos que interagiram votando ou escrevendo no mural em cada um dos confrontos recentes.</p>
+            <div style="overflow-x:auto;">
+                <table class="dash-table">
+                    <thead>
+                        <tr>
+                            <th>Evento</th>
+                            <th>Data</th>
+                            <th>Participantes Únicos</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ev in Model.Metricas.EngajamentoPorEvento)
+                        {
+                            <tr>
+                                <td style="font-weight:700;">
+                                    <span style="margin-right:6px;">@ev.ModalidadeIcone</span> @ev.Titulo
+                                </td>
+                                <td style="color:var(--texto-suave);">@ev.Inicio.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    <span class="badge-participantes">@ev.ParticipantesUnicos torcedores</span>
+                                </td>
+                                <td>
+                                    @if (ev.Inicio.Date == DateTime.Today)
+                                    {
+                                        <span class="badge badge--aovivo" style="font-size: 0.72rem; padding: 2px 8px;">Hoje</span>
+                                    }
+                                    else if (ev.Inicio > DateTime.Now)
+                                    {
+                                        <span class="badge badge--agendado" style="font-size: 0.72rem; padding: 2px 8px;">Agendado</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge--encerrado" style="font-size: 0.72rem; padding: 2px 8px;">Encerrado</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ── SEÇÃO ORIGINAL DE CRIAÇÃO E FEED ── -->
+        <div style="display:grid; gap:26px; grid-template-columns: 1.5fr 1fr; align-items:start; margin-top:32px;">
+            <div class="painel">
+                <h3>Publicar novo evento</h3>
+
+                @if (TempData["EventoOk"] is string ok)
+                {
+                    <div class="alerta alerta--ok">✅ @ok</div>
+                }
+
+                <div asp-validation-summary="ModelOnly" class="text-erro"></div>
+
+                <form asp-action="Criar" method="post" class="form-grid">
+                    @Html.AntiForgeryToken()
+
+                    <div class="campo col-full">
+                        <label asp-for="Evento.Titulo">Título do evento</label>
+                        <input asp-for="Evento.Titulo" placeholder="Ex.: Lages FC x Guarani de Lages" />
+                        <span asp-validation-for="Evento.Titulo" class="text-erro"></span>
+                    </div>
+
+                    <div class="campo">
+                        <label asp-for="Evento.ModalidadeId">Modalidade</label>
+                        <select asp-for="Evento.ModalidadeId">
+                            <option value="">Selecione...</option>
+                            @foreach (var m in Model.Modalidades)
+                            {
+                                <option value="@m.Id">@m.Icone @m.Nome</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Evento.ModalidadeId" class="text-erro"></span>
+                    </div>
+                    <div class="campo">
+                        <label asp-for="Evento.LocalId">Local</label>
+                        <select asp-for="Evento.LocalId">
+                            <option value="">Selecione...</option>
+                            @foreach (var l in Model.Locais)
+                            {
+                                <option value="@l.Id">@l.Nome</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Evento.LocalId" class="text-erro"></span>
+                    </div>
+
+                    <div class="campo">
+                        <label asp-for="Evento.EquipeCasaId">Equipe mandante (opcional)</label>
+                        <select asp-for="Evento.EquipeCasaId">
+                            <option value="">—</option>
+                            @foreach (var e in Model.Equipes)
+                            {
+                                <option value="@e.Id">@e.Escudo @e.Nome</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="campo">
+                        <label asp-for="Evento.EquipeVisitanteId">Equipe visitante (opcional)</label>
+                        <select asp-for="Evento.EquipeVisitanteId">
+                            <option value="">—</option>
+                            @foreach (var e in Model.Equipes)
+                            {
+                                <option value="@e.Id">@e.Escudo @e.Nome</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Evento.EquipeVisitanteId" class="text-erro"></span>
+                    </div>
+
+                    <div class="campo col-full">
+                        <label asp-for="Evento.Campeonato">Campeonato</label>
+                        <input asp-for="Evento.Campeonato" placeholder="Ex.: Campeonato Citadino de Futebol 2026" />
+                    </div>
+
+                    <div class="campo">
+                        <label asp-for="Evento.Inicio">Início</label>
+                        <input asp-for="Evento.Inicio" type="datetime-local" />
+                        <span asp-validation-for="Evento.Inicio" class="text-erro"></span>
+                    </div>
+                    <div class="campo">
+                        <label asp-for="Evento.Fim">Término (opcional)</label>
+                        <input asp-for="Evento.Fim" type="datetime-local" />
+                    </div>
+
+                    <div class="campo col-full">
+                        <label asp-for="Evento.Descricao">Descrição</label>
+                        <input asp-for="Evento.Descricao" placeholder="Detalhes do evento, ingressos, observações..." />
+                    </div>
+
+                    <div class="campo">
+                        <label asp-for="Evento.PrecoIngresso">Preço do ingresso (R$)</label>
+                        <input asp-for="Evento.PrecoIngresso" type="number" step="0.01" min="0" placeholder="0,00" />
+                    </div>
+                    <div class="campo" style="justify-content:flex-end;">
+                        <label class="check"><input asp-for="Evento.Gratuito" type="checkbox" /> Evento gratuito</label>
+                        <label class="check"><input asp-for="Evento.Destaque" type="checkbox" /> Exibir em destaque</label>
+                    </div>
+
+                    <div class="col-full">
+                        <button class="btn btn--primary btn--block" type="submit">Publicar na agenda</button>
+                    </div>
+                </form>
+            </div>
+
+            <aside>
+                <div class="painel">
+                    <h3>Próximos publicados</h3>
+                    <div class="feed">
+                        @foreach (var e in Model.Proximos)
+                        {
+                            <div class="feed-item feed-item--novoevento">
+                                <div class="feed-item__icone" style="background:@e.ModalidadeCor">@e.ModalidadeIcone</div>
+                                <div class="feed-item__corpo">
+                                    <div class="feed-item__topo">
+                                        <p class="feed-item__titulo">@e.Titulo</p>
+                                        <span class="feed-item__hora">@DiaMes(e.Inicio)</span>
+                                    </div>
+                                    <p class="feed-item__msg">@e.LocalNome · @Hora(e.Inicio)</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </aside>
+        </div>
+
     </div>
 </section>
 

@@ -14,11 +14,11 @@ por **polling** (~4s) até o SignalR (Fase 2 geral) substituir.
 
 ## Onde entra (arquivos)
 1. **Botão de entrada** em `Views/Agenda/Evento.cshtml` (no `aside`, junto ao CTA "Avise-me"), com estados por `Model.Status`:
-   - `AoVivo` → habilitado, **"🔴 Interagir com a Torcida"** → leva a `/Torcida/{slug}`.
+   - `AoVivo` → habilitado, **"Interagir com a Torcida"** → leva a `/Torcida/{slug}`.
    - `Agendado` → desabilitado + legenda "Disponível quando o jogo começar".
    - `Encerrado` → "Ver resultados da torcida" (abre a tela em modo leitura).
    - Só renderizar para `EhConfronto` (MVP/disputa fazem sentido em jogo entre equipes).
-2. (Opcional) selo **"🔴 AO VIVO"** clicável nos cards de evento ao vivo (`_CardEvento.cshtml`) levando à mesma tela.
+2. (Opcional) selo **"AO VIVO"** clicável nos cards de evento ao vivo (`_CardEvento.cshtml`) levando à mesma tela.
 3. **Nova tela**: `Controllers/TorcidaController.cs` + `Views/Torcida/Index.cshtml`.
 4. **JS**: `wwwroot/js/torcida.js` (cliente da API). **CSS**: novas classes em `wwwroot/css/site.css`.
 

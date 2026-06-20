@@ -44,6 +44,7 @@ public class AdminController(IEventoService eventos, ICatalogoService catalogo) 
         Modalidades = await catalogo.ListarModalidadesAsync(ct),
         Locais = await catalogo.ListarLocaisAsync(ct),
         Equipes = await catalogo.ListarEquipesAsync(ct: ct),
-        Proximos = await eventos.ListarProximosAsync(8, ct)
+        Proximos = await eventos.ListarProximosAsync(8, ct),
+        Metricas = await eventos.ObterMetricasDashboardAsync(ct)
     };
 }

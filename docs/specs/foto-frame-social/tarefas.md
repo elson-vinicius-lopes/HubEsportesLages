@@ -26,7 +26,7 @@
       `X-Torcedor-Id`). Swagger ok, `Tags("Frames")`. [dev-backend]
 
 ## Fase 2 — Mobile (composição e exportação)
-- [ ] **Mobile**: botão "📸 Foto com frame" no `EventDetailPage` (habilitado exceto `Cancelado`),
+- [ ] **Mobile**: botão "Foto com frame" no `EventDetailPage` (habilitado exceto `Cancelado`),
       estilo `ButtonAccent`. [dev-mobile / designer-ui]
 - [ ] **Mobile**: `FrameComposerPage` + `FrameComposerViewModel` — carrega `GET .../frames`,
       popula frames + campos via `prefill`; estados loading/erro/vazio; fallback frame embutido offline. [dev-mobile]

@@ -19,14 +19,14 @@ public static class DataSeeder
             return; // já populado
 
         // ---------------------------------------------------------------- Modalidades
-        var futebol = new Modalidade { Nome = "Futebol", Slug = "futebol", Icone = "⚽", CorHex = "#16a34a", Descricao = "Campeonatos de campo da Serra Catarinense." };
-        var futsal = new Modalidade { Nome = "Futsal", Slug = "futsal", Icone = "🥅", CorHex = "#2563eb", Descricao = "A modalidade mais popular dos ginásios de Lages." };
-        var basquete = new Modalidade { Nome = "Basquete", Slug = "basquete", Icone = "🏀", CorHex = "#ea580c", Descricao = "Disputas de quadra no planalto serrano." };
-        var volei = new Modalidade { Nome = "Vôlei", Slug = "volei", Icone = "🏐", CorHex = "#d97706", Descricao = "Vôlei de quadra masculino e feminino." };
-        var handebol = new Modalidade { Nome = "Handebol", Slug = "handebol", Icone = "🤾", CorHex = "#7c3aed", Descricao = "Handebol escolar e adulto." };
-        var atletismo = new Modalidade { Nome = "Atletismo", Slug = "atletismo", Icone = "🏃", CorHex = "#dc2626", Descricao = "Corridas de rua e provas de pista." };
-        var ciclismo = new Modalidade { Nome = "Ciclismo", Slug = "ciclismo", Icone = "🚴", CorHex = "#0891b2", Descricao = "Provas de estrada e mountain bike na serra." };
-        var lutas = new Modalidade { Nome = "Artes Marciais", Slug = "artes-marciais", Icone = "🥋", CorHex = "#475569", Descricao = "Jiu-jitsu, judô e outras artes marciais." };
+        var futebol = new Modalidade { Nome = "Futebol", Slug = "futebol", Icone = "FUT", CorHex = "#16a34a", Descricao = "Campeonatos de campo da Serra Catarinense." };
+        var futsal = new Modalidade { Nome = "Futsal", Slug = "futsal", Icone = "FSL", CorHex = "#2563eb", Descricao = "A modalidade mais popular dos ginásios de Lages." };
+        var basquete = new Modalidade { Nome = "Basquete", Slug = "basquete", Icone = "BSQ", CorHex = "#ea580c", Descricao = "Disputas de quadra no planalto serrano." };
+        var volei = new Modalidade { Nome = "Vôlei", Slug = "volei", Icone = "VLI", CorHex = "#d97706", Descricao = "Vôlei de quadra masculino e feminino." };
+        var handebol = new Modalidade { Nome = "Handebol", Slug = "handebol", Icone = "HND", CorHex = "#7c3aed", Descricao = "Handebol escolar e adulto." };
+        var atletismo = new Modalidade { Nome = "Atletismo", Slug = "atletismo", Icone = "ATL", CorHex = "#dc2626", Descricao = "Corridas de rua e provas de pista." };
+        var ciclismo = new Modalidade { Nome = "Ciclismo", Slug = "ciclismo", Icone = "CIC", CorHex = "#0891b2", Descricao = "Provas de estrada e mountain bike na serra." };
+        var lutas = new Modalidade { Nome = "Artes Marciais", Slug = "artes-marciais", Icone = "LUT", CorHex = "#475569", Descricao = "Jiu-jitsu, judô e outras artes marciais." };
 
         var modalidades = new[] { futebol, futsal, basquete, volei, handebol, atletismo, ciclismo, lutas };
 
@@ -44,24 +44,24 @@ public static class DataSeeder
         Equipe Eq(string nome, string sigla, Modalidade m, string escudo, string cor) =>
             new() { Nome = nome, Sigla = sigla, Modalidade = m, Escudo = escudo, CorPrimaria = cor };
 
-        var lagesFc = Eq("Lages Futebol Clube", "LAG", futebol, "⚽", "#16a34a");
-        var guarani = Eq("Guarani de Lages", "GUA", futebol, "🦁", "#1d4ed8");
-        var internacional = Eq("Internacional de Lages", "INT", futebol, "🔴", "#dc2626");
-        var vilaNova = Eq("Vila Nova EC", "VIL", futebol, "⚪", "#334155");
+        var lagesFc = Eq("Lages Futebol Clube", "LAG", futebol, "LAG", "#16a34a");
+        var guarani = Eq("Guarani de Lages", "GUA", futebol, "GUA", "#1d4ed8");
+        var internacional = Eq("Internacional de Lages", "INT", futebol, "INT", "#dc2626");
+        var vilaNova = Eq("Vila Nova EC", "VIL", futebol, "VIL", "#334155");
 
-        var acel = Eq("ACEL Futsal", "ACE", futsal, "🟢", "#16a34a");
-        var lagesFutsal = Eq("Lages Futsal", "LGF", futsal, "🔵", "#2563eb");
-        var aabb = Eq("AABB Lages", "AAB", futsal, "🟡", "#d97706");
-        var serraFutsal = Eq("Serra Futsal", "SER", futsal, "🟠", "#ea580c");
+        var acel = Eq("ACEL Futsal", "ACE", futsal, "ACE", "#16a34a");
+        var lagesFutsal = Eq("Lages Futsal", "LGF", futsal, "LGF", "#2563eb");
+        var aabb = Eq("AABB Lages", "AAB", futsal, "AAB", "#d97706");
+        var serraFutsal = Eq("Serra Futsal", "SER", futsal, "SER", "#ea580c");
 
-        var lagesBasquete = Eq("Lages Basquete", "LBC", basquete, "🏀", "#ea580c");
-        var planalto = Eq("Planalto Basquete", "PLA", basquete, "🟠", "#b45309");
+        var lagesBasquete = Eq("Lages Basquete", "LBC", basquete, "LBC", "#ea580c");
+        var planalto = Eq("Planalto Basquete", "PLA", basquete, "PLA", "#b45309");
 
-        var voleiSerrano = Eq("Vôlei Serrano", "VSE", volei, "🏐", "#d97706");
-        var uniplacVolei = Eq("UNIPLAC Vôlei", "UNI", volei, "🔵", "#2563eb");
+        var voleiSerrano = Eq("Vôlei Serrano", "VSE", volei, "VSE", "#d97706");
+        var uniplacVolei = Eq("UNIPLAC Vôlei", "UNI", volei, "UNI", "#2563eb");
 
-        var handebolLages = Eq("Handebol Lages", "HLG", handebol, "🤾", "#7c3aed");
-        var serraHandebol = Eq("Serra Handebol", "SHA", handebol, "🟣", "#6d28d9");
+        var handebolLages = Eq("Handebol Lages", "HLG", handebol, "HLG", "#7c3aed");
+        var serraHandebol = Eq("Serra Handebol", "SHA", handebol, "SHA", "#6d28d9");
 
         var equipes = new[]
         {
@@ -108,7 +108,7 @@ public static class DataSeeder
                 PrecoIngresso = gratuito ? null : preco,
                 Destaque = destaque,
                 Descricao = string.IsNullOrWhiteSpace(descricao)
-                    ? $"{titulo} — acompanhe ao vivo pelo Hub Esportes Lages."
+                    ? $"{titulo} — acompanhe ao vivo pelo Bora pro Jogo."
                     : descricao,
                 CriadoEm = agora.AddDays(-20),
                 AtualizadoEm = agora
@@ -118,12 +118,12 @@ public static class DataSeeder
         }
 
         // ---- Encerrados (alimentam a página de Resultados) ----
-        Novo("Lages FC x Guarani de Lages", "Campeonato Citadino de Futebol 2026", futebol, vidalRamos,
+        var jogoFutebol = Novo("Lages FC x Guarani de Lages", "Campeonato Citadino de Futebol 2026", futebol, vidalRamos,
             hoje.AddDays(-7).AddHours(15), StatusEvento.Encerrado, lagesFc, guarani, 2, 1,
             descricao: "Clássico da rodada de abertura com casa cheia no Vidal Ramos.");
-        Novo("ACEL x Lages Futsal", "Liga Serrana de Futsal", futsal, jonesMinosso,
+        var jogoFutsal1 = Novo("ACEL x Lages Futsal", "Liga Serrana de Futsal", futsal, jonesMinosso,
             hoje.AddDays(-5).AddHours(20), StatusEvento.Encerrado, acel, lagesFutsal, 4, 3);
-        Novo("Lages Basquete x Planalto", "Copa Planalto de Basquete", basquete, uniplac,
+        var jogoBasquete = Novo("Lages Basquete x Planalto", "Copa Planalto de Basquete", basquete, uniplac,
             hoje.AddDays(-3).AddHours(19), StatusEvento.Encerrado, lagesBasquete, planalto, 78, 65);
         Novo("Vôlei Serrano x UNIPLAC", "Liga Serrana de Vôlei", volei, sesi,
             hoje.AddDays(-2).AddHours(20), StatusEvento.Encerrado, voleiSerrano, uniplacVolei, 3, 1);
@@ -203,12 +203,178 @@ public static class DataSeeder
 
         var muralSeed = new[]
         {
-            new MensagemTorcida { EventoId = aoVivo.Id, TorcedorId = "seed-1", Autor = "Serra Azul", Texto = "Vamo AABB! 🔵", CriadoEm = agora.AddMinutes(-12) },
-            new MensagemTorcida { EventoId = aoVivo.Id, TorcedorId = "seed-2", Autor = "Torcida Serra", Texto = "Que jogão! ⚽", CriadoEm = agora.AddMinutes(-7) },
-            new MensagemTorcida { EventoId = aoVivo.Id, TorcedorId = "seed-3", Autor = "Lageano", Texto = "Empate justo até aqui 💪", CriadoEm = agora.AddMinutes(-2) },
+            new MensagemTorcida { EventoId = aoVivo.Id, TorcedorId = "seed-1", Autor = "Serra Azul", Texto = "Vamo AABB!", CriadoEm = agora.AddMinutes(-12) },
+            new MensagemTorcida { EventoId = aoVivo.Id, TorcedorId = "seed-2", Autor = "Torcida Serra", Texto = "Que jogão!", CriadoEm = agora.AddMinutes(-7) },
+            new MensagemTorcida { EventoId = aoVivo.Id, TorcedorId = "seed-3", Autor = "Lageano", Texto = "Empate justo até aqui", CriadoEm = agora.AddMinutes(-2) },
         };
         await db.MensagensTorcida.AddRangeAsync(muralSeed, ct);
 
+        await db.SaveChangesAsync(ct);
+
+        // --------------------------------- Interação: Jogo 1 — Lages FC x Guarani (futebol)
+        var jogadoresFutebol = new[]
+        {
+            new JogadorEvento { EventoId = jogoFutebol.Id, EquipeId = lagesFc.Id, Nome = "Rodrigo (GOL)" },
+            new JogadorEvento { EventoId = jogoFutebol.Id, EquipeId = lagesFc.Id, Nome = "Anderson Volante" },
+            new JogadorEvento { EventoId = jogoFutebol.Id, EquipeId = lagesFc.Id, Nome = "Caio Atacante" },
+            new JogadorEvento { EventoId = jogoFutebol.Id, EquipeId = guarani.Id, Nome = "Fábio (GOL)" },
+            new JogadorEvento { EventoId = jogoFutebol.Id, EquipeId = guarani.Id, Nome = "Henrique Meia" },
+            new JogadorEvento { EventoId = jogoFutebol.Id, EquipeId = guarani.Id, Nome = "Paulo Zagueiro" },
+        };
+        await db.JogadoresEvento.AddRangeAsync(jogadoresFutebol, ct);
+        await db.SaveChangesAsync(ct);
+
+        // MVP votes — 12 torcedores distintos
+        var votosFutebol = new[]
+        {
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[2].Id, TorcedorId = "futseed-01", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-30) },
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[2].Id, TorcedorId = "futseed-02", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-28) },
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[2].Id, TorcedorId = "futseed-03", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-25) },
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[1].Id, TorcedorId = "futseed-04", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-20) },
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[1].Id, TorcedorId = "futseed-05", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-18) },
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[0].Id, TorcedorId = "futseed-06", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-15) },
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[4].Id, TorcedorId = "futseed-07", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-12) },
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[4].Id, TorcedorId = "futseed-08", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-10) },
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[5].Id, TorcedorId = "futseed-09", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-8) },
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[3].Id, TorcedorId = "futseed-10", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-5) },
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[2].Id, TorcedorId = "futseed-11", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-3) },
+            new VotoMvp { EventoId = jogoFutebol.Id, JogadorEventoId = jogadoresFutebol[2].Id, TorcedorId = "futseed-12", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(-1) },
+        };
+        await db.VotosMvp.AddRangeAsync(votosFutebol, ct);
+
+        var enqueteFutebol = new Enquete
+        {
+            EventoId = jogoFutebol.Id,
+            Pergunta = "Quem foi o craque da partida?",
+            Ativa = false,
+            CriadoEm = jogoFutebol.Inicio.AddMinutes(10),
+            Opcoes = new List<OpcaoEnquete>
+            {
+                new() { Texto = "Caio Atacante (Lages FC)" },
+                new() { Texto = "Anderson Volante (Lages FC)" },
+                new() { Texto = "Henrique Meia (Guarani)" },
+            }
+        };
+        await db.Enquetes.AddAsync(enqueteFutebol, ct);
+        await db.SaveChangesAsync(ct);
+
+        var opcoesFutebol = enqueteFutebol.Opcoes.ToArray();
+        await db.VotosEnquete.AddRangeAsync(new[]
+        {
+            new VotoEnquete { EnqueteId = enqueteFutebol.Id, OpcaoEnqueteId = opcoesFutebol[0].Id, TorcedorId = "futseed-01" },
+            new VotoEnquete { EnqueteId = enqueteFutebol.Id, OpcaoEnqueteId = opcoesFutebol[0].Id, TorcedorId = "futseed-02" },
+            new VotoEnquete { EnqueteId = enqueteFutebol.Id, OpcaoEnqueteId = opcoesFutebol[0].Id, TorcedorId = "futseed-03" },
+            new VotoEnquete { EnqueteId = enqueteFutebol.Id, OpcaoEnqueteId = opcoesFutebol[1].Id, TorcedorId = "futseed-04" },
+            new VotoEnquete { EnqueteId = enqueteFutebol.Id, OpcaoEnqueteId = opcoesFutebol[2].Id, TorcedorId = "futseed-07" },
+            new VotoEnquete { EnqueteId = enqueteFutebol.Id, OpcaoEnqueteId = opcoesFutebol[2].Id, TorcedorId = "futseed-08" },
+        }, ct);
+
+        await db.MensagensTorcida.AddRangeAsync(new[]
+        {
+            new MensagemTorcida { EventoId = jogoFutebol.Id, TorcedorId = "futseed-01", Autor = "Fã do Lages FC", Texto = "Que golaço do Caio!", CriadoEm = jogoFutebol.Inicio.AddMinutes(35) },
+            new MensagemTorcida { EventoId = jogoFutebol.Id, TorcedorId = "futseed-05", Autor = "Guardião Verde", Texto = "Rodrigo salvou o jogo!", CriadoEm = jogoFutebol.Inicio.AddMinutes(60) },
+            new MensagemTorcida { EventoId = jogoFutebol.Id, TorcedorId = "futseed-09", Autor = "Guarani Fiel", Texto = "Honra do Guarani sempre!", CriadoEm = jogoFutebol.Inicio.AddMinutes(80) },
+            new MensagemTorcida { EventoId = jogoFutebol.Id, TorcedorId = "futseed-12", Autor = "Lageano da Gema", Texto = "Cidade toda vibrou!", CriadoEm = jogoFutebol.Fim!.Value.AddMinutes(5) },
+        }, ct);
+        await db.SaveChangesAsync(ct);
+
+        // --------------------------------- Interação: Jogo 2 — ACEL x Lages Futsal
+        var jogadoresFutsal1 = new[]
+        {
+            new JogadorEvento { EventoId = jogoFutsal1.Id, EquipeId = acel.Id, Nome = "Marcos (GOL)" },
+            new JogadorEvento { EventoId = jogoFutsal1.Id, EquipeId = acel.Id, Nome = "Felipe Fixo" },
+            new JogadorEvento { EventoId = jogoFutsal1.Id, EquipeId = acel.Id, Nome = "Renato Ala" },
+            new JogadorEvento { EventoId = jogoFutsal1.Id, EquipeId = lagesFutsal.Id, Nome = "Gustavo (GOL)" },
+            new JogadorEvento { EventoId = jogoFutsal1.Id, EquipeId = lagesFutsal.Id, Nome = "Thiago Pivô" },
+            new JogadorEvento { EventoId = jogoFutsal1.Id, EquipeId = lagesFutsal.Id, Nome = "Bruno Ala" },
+        };
+        await db.JogadoresEvento.AddRangeAsync(jogadoresFutsal1, ct);
+        await db.SaveChangesAsync(ct);
+
+        var votosFutsal1 = new[]
+        {
+            new VotoMvp { EventoId = jogoFutsal1.Id, JogadorEventoId = jogadoresFutsal1[2].Id, TorcedorId = "fseed-01", CriadoEm = jogoFutsal1.Fim!.Value.AddMinutes(-25) },
+            new VotoMvp { EventoId = jogoFutsal1.Id, JogadorEventoId = jogadoresFutsal1[2].Id, TorcedorId = "fseed-02", CriadoEm = jogoFutsal1.Fim!.Value.AddMinutes(-22) },
+            new VotoMvp { EventoId = jogoFutsal1.Id, JogadorEventoId = jogadoresFutsal1[1].Id, TorcedorId = "fseed-03", CriadoEm = jogoFutsal1.Fim!.Value.AddMinutes(-20) },
+            new VotoMvp { EventoId = jogoFutsal1.Id, JogadorEventoId = jogadoresFutsal1[1].Id, TorcedorId = "fseed-04", CriadoEm = jogoFutsal1.Fim!.Value.AddMinutes(-18) },
+            new VotoMvp { EventoId = jogoFutsal1.Id, JogadorEventoId = jogadoresFutsal1[4].Id, TorcedorId = "fseed-05", CriadoEm = jogoFutsal1.Fim!.Value.AddMinutes(-15) },
+            new VotoMvp { EventoId = jogoFutsal1.Id, JogadorEventoId = jogadoresFutsal1[4].Id, TorcedorId = "fseed-06", CriadoEm = jogoFutsal1.Fim!.Value.AddMinutes(-12) },
+            new VotoMvp { EventoId = jogoFutsal1.Id, JogadorEventoId = jogadoresFutsal1[5].Id, TorcedorId = "fseed-07", CriadoEm = jogoFutsal1.Fim!.Value.AddMinutes(-10) },
+            new VotoMvp { EventoId = jogoFutsal1.Id, JogadorEventoId = jogadoresFutsal1[0].Id, TorcedorId = "fseed-08", CriadoEm = jogoFutsal1.Fim!.Value.AddMinutes(-8) },
+            new VotoMvp { EventoId = jogoFutsal1.Id, JogadorEventoId = jogadoresFutsal1[3].Id, TorcedorId = "fseed-09", CriadoEm = jogoFutsal1.Fim!.Value.AddMinutes(-5) },
+        };
+        await db.VotosMvp.AddRangeAsync(votosFutsal1, ct);
+
+        await db.MensagensTorcida.AddRangeAsync(new[]
+        {
+            new MensagemTorcida { EventoId = jogoFutsal1.Id, TorcedorId = "fseed-01", Autor = "Fã do ACEL", Texto = "Renato voou essa noite!", CriadoEm = jogoFutsal1.Inicio.AddMinutes(15) },
+            new MensagemTorcida { EventoId = jogoFutsal1.Id, TorcedorId = "fseed-04", Autor = "Torcida Serrana", Texto = "Jogo pegado demais!", CriadoEm = jogoFutsal1.Inicio.AddMinutes(30) },
+            new MensagemTorcida { EventoId = jogoFutsal1.Id, TorcedorId = "fseed-06", Autor = "LagesFutsal+1", Texto = "Thiago decidiu no final!", CriadoEm = jogoFutsal1.Inicio.AddMinutes(50) },
+            new MensagemTorcida { EventoId = jogoFutsal1.Id, TorcedorId = "fseed-09", Autor = "Ginásio Cheio", Texto = "Que jogo histórico no Jones Minosso!", CriadoEm = jogoFutsal1.Fim!.Value.AddMinutes(3) },
+        }, ct);
+        await db.SaveChangesAsync(ct);
+
+        // --------------------------------- Interação: Jogo 3 — Lages Basquete x Planalto
+        var jogadoresBasquete = new[]
+        {
+            new JogadorEvento { EventoId = jogoBasquete.Id, EquipeId = lagesBasquete.Id, Nome = "Alex (PG)" },
+            new JogadorEvento { EventoId = jogoBasquete.Id, EquipeId = lagesBasquete.Id, Nome = "Victor (SF)" },
+            new JogadorEvento { EventoId = jogoBasquete.Id, EquipeId = lagesBasquete.Id, Nome = "Daniel (C)" },
+            new JogadorEvento { EventoId = jogoBasquete.Id, EquipeId = planalto.Id, Nome = "Rafael (PG)" },
+            new JogadorEvento { EventoId = jogoBasquete.Id, EquipeId = planalto.Id, Nome = "Igor (SG)" },
+            new JogadorEvento { EventoId = jogoBasquete.Id, EquipeId = planalto.Id, Nome = "Lucas (PF)" },
+        };
+        await db.JogadoresEvento.AddRangeAsync(jogadoresBasquete, ct);
+        await db.SaveChangesAsync(ct);
+
+        var votosBasquete = new[]
+        {
+            new VotoMvp { EventoId = jogoBasquete.Id, JogadorEventoId = jogadoresBasquete[1].Id, TorcedorId = "bseed-01", CriadoEm = jogoBasquete.Fim!.Value.AddMinutes(-20) },
+            new VotoMvp { EventoId = jogoBasquete.Id, JogadorEventoId = jogadoresBasquete[1].Id, TorcedorId = "bseed-02", CriadoEm = jogoBasquete.Fim!.Value.AddMinutes(-18) },
+            new VotoMvp { EventoId = jogoBasquete.Id, JogadorEventoId = jogadoresBasquete[1].Id, TorcedorId = "bseed-03", CriadoEm = jogoBasquete.Fim!.Value.AddMinutes(-15) },
+            new VotoMvp { EventoId = jogoBasquete.Id, JogadorEventoId = jogadoresBasquete[1].Id, TorcedorId = "bseed-04", CriadoEm = jogoBasquete.Fim!.Value.AddMinutes(-12) },
+            new VotoMvp { EventoId = jogoBasquete.Id, JogadorEventoId = jogadoresBasquete[2].Id, TorcedorId = "bseed-05", CriadoEm = jogoBasquete.Fim!.Value.AddMinutes(-10) },
+            new VotoMvp { EventoId = jogoBasquete.Id, JogadorEventoId = jogadoresBasquete[2].Id, TorcedorId = "bseed-06", CriadoEm = jogoBasquete.Fim!.Value.AddMinutes(-8) },
+            new VotoMvp { EventoId = jogoBasquete.Id, JogadorEventoId = jogadoresBasquete[0].Id, TorcedorId = "bseed-07", CriadoEm = jogoBasquete.Fim!.Value.AddMinutes(-6) },
+            new VotoMvp { EventoId = jogoBasquete.Id, JogadorEventoId = jogadoresBasquete[4].Id, TorcedorId = "bseed-08", CriadoEm = jogoBasquete.Fim!.Value.AddMinutes(-4) },
+            new VotoMvp { EventoId = jogoBasquete.Id, JogadorEventoId = jogadoresBasquete[3].Id, TorcedorId = "bseed-09", CriadoEm = jogoBasquete.Fim!.Value.AddMinutes(-2) },
+            new VotoMvp { EventoId = jogoBasquete.Id, JogadorEventoId = jogadoresBasquete[1].Id, TorcedorId = "bseed-10", CriadoEm = jogoBasquete.Fim!.Value.AddMinutes(-1) },
+        };
+        await db.VotosMvp.AddRangeAsync(votosBasquete, ct);
+
+        var enqueteBasquete = new Enquete
+        {
+            EventoId = jogoBasquete.Id,
+            Pergunta = "Quem merece o MVP do jogo?",
+            Ativa = false,
+            CriadoEm = jogoBasquete.Inicio.AddMinutes(5),
+            Opcoes = new List<OpcaoEnquete>
+            {
+                new() { Texto = "Victor - Lages Basquete" },
+                new() { Texto = "Daniel - Lages Basquete" },
+                new() { Texto = "Igor - Planalto" },
+            }
+        };
+        await db.Enquetes.AddAsync(enqueteBasquete, ct);
+        await db.SaveChangesAsync(ct);
+
+        var opcoesBasquete = enqueteBasquete.Opcoes.ToArray();
+        await db.VotosEnquete.AddRangeAsync(new[]
+        {
+            new VotoEnquete { EnqueteId = enqueteBasquete.Id, OpcaoEnqueteId = opcoesBasquete[0].Id, TorcedorId = "bseed-01" },
+            new VotoEnquete { EnqueteId = enqueteBasquete.Id, OpcaoEnqueteId = opcoesBasquete[0].Id, TorcedorId = "bseed-02" },
+            new VotoEnquete { EnqueteId = enqueteBasquete.Id, OpcaoEnqueteId = opcoesBasquete[0].Id, TorcedorId = "bseed-03" },
+            new VotoEnquete { EnqueteId = enqueteBasquete.Id, OpcaoEnqueteId = opcoesBasquete[1].Id, TorcedorId = "bseed-05" },
+            new VotoEnquete { EnqueteId = enqueteBasquete.Id, OpcaoEnqueteId = opcoesBasquete[2].Id, TorcedorId = "bseed-08" },
+        }, ct);
+
+        await db.MensagensTorcida.AddRangeAsync(new[]
+        {
+            new MensagemTorcida { EventoId = jogoBasquete.Id, TorcedorId = "bseed-01", Autor = "Quadra Cheia", Texto = "Victor com 30 pontos! Absurdo!", CriadoEm = jogoBasquete.Inicio.AddMinutes(25) },
+            new MensagemTorcida { EventoId = jogoBasquete.Id, TorcedorId = "bseed-04", Autor = "Planalto Fiel", Texto = "Igor ainda honrou o Planalto!", CriadoEm = jogoBasquete.Inicio.AddMinutes(50) },
+            new MensagemTorcida { EventoId = jogoBasquete.Id, TorcedorId = "bseed-07", Autor = "UNIPLAC Arena", Texto = "Ginásio pegando fogo!", CriadoEm = jogoBasquete.Inicio.AddMinutes(70) },
+            new MensagemTorcida { EventoId = jogoBasquete.Id, TorcedorId = "bseed-10", Autor = "LagesBsk+1", Texto = "Título vai ficar em casa!", CriadoEm = jogoBasquete.Fim!.Value.AddMinutes(2) },
+        }, ct);
         await db.SaveChangesAsync(ct);
 
         // ----------------------------------------------------------------- Notificações
@@ -216,7 +382,7 @@ public static class DataSeeder
         {
             new()
             {
-                Titulo = "Bem-vindo ao Hub Esportes Lages! 🎉",
+                Titulo = "Bem-vindo ao Bora pro Jogo!",
                 Mensagem = "Acompanhe a agenda completa do esporte da cidade e ative as notificações da sua equipe.",
                 Tipo = TipoNotificacao.NovoEvento,
                 Importante = true,

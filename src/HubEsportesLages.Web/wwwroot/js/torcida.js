@@ -145,6 +145,7 @@
         }
         var votou = enquete.minhaOpcaoId != null;
         var html = "<p style=\"font-weight:600; margin:0 0 14px;\">" + escapar(enquete.pergunta) + "</p>";
+        html += '<div class="torcida-opcoes">';
         html += enquete.opcoes.map(function (o) {
             var ativo = enquete.minhaOpcaoId === o.id ? " torcida-opcao--ativa" : "";
             return '<button type="button" class="torcida-opcao' + ativo + '" ' +
@@ -155,6 +156,7 @@
                 '<span class="torcida-barra"><span class="torcida-barra__fill" style="width:' + o.percentual + '%"></span></span>' +
                 "</button>";
         }).join("");
+        html += '</div>';
         elEnquete.innerHTML = html;
 
         if (!votou) {

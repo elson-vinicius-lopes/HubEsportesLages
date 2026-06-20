@@ -1,4 +1,4 @@
-# 🏟️ Hub Esportes Lages
+# Hub Esportes Lages
 
 Hub central de **agenda e notificações dos esportes de Lages/SC**. Reúne em um só lugar os jogos,
 corridas e competições de todas as modalidades da cidade, com **resultados**, **feed de
@@ -11,7 +11,7 @@ eventos esportivos de Lages”*), inspirado no padrão de portais como
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
 - **Agenda esportiva** com filtros por modalidade, local, período (hoje / semana / mês) e busca textual, além de paginação.
 - **Página de evento** com confronto, placar, local + link para o Google Maps, ingresso e descrição.
@@ -25,7 +25,7 @@ eventos esportivos de Lages”*), inspirado no padrão de portais como
 
 ---
 
-## 🧱 Arquitetura
+## Arquitetura
 
 Solução em **.NET 10** seguindo *Clean Architecture* (4 projetos):
 
@@ -49,7 +49,7 @@ HubEsportesLages.slnx
 
 ---
 
-## ▶️ Como executar
+## Como executar
 
 Pré-requisito: **.NET SDK 10**.
 
@@ -70,7 +70,7 @@ Acesse no navegador:
 
 ---
 
-## 🔌 API REST (principais endpoints)
+## API REST (principais endpoints)
 
 | Método | Rota | Descrição |
 |---|---|---|
@@ -93,14 +93,14 @@ curl http://localhost:5210/api/eventos?Modalidade=futsal&Periodo=Todos
 
 ---
 
-## 📝 Observações
+## Observações
 
 - Os **locais, equipes e jogos** do seed são **ilustrativos**, montados para demonstrar o produto.
 - O envio real de e-mail/push não está implementado — as inscrições e o feed simulam o canal de
   notificação (ponto natural de evolução, integrando provedor de e-mail/Web Push/WhatsApp).
 - O banco é recriado a partir do seed apenas quando está vazio; apague `hubesportes.db` para resetar.
 
-## 🚀 Próximos passos
+## Próximos passos
 
 - Autenticação na área do organizador.
 - Envio real de notificações (e-mail / Web Push / WhatsApp) a partir das inscrições.

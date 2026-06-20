@@ -172,7 +172,7 @@ Exemplo `PontoEncontroDto`:
   rolou / jogo começou"). Reutiliza o gating de UI por status já usado para o botão "Interagir".
 - **Card de ponto** (componente `Border` arredondado, tokens dark):
   - Título (`Nome`) + chip de horário; linha de endereço + **distância** ("a 800 m"); `Descricao`;
-    bloco "Regras" quando houver; rodapé com contador "👥 {presencas} confirmados".
+    bloco "Regras" quando houver; rodapé com contador "{presencas} confirmados".
   - Botão **"Ver Rota"** → `Launcher.OpenAsync(mapaUrl)` (mesmo padrão do "Ver Rota" do `Local`).
   - Botão toggle **"Confirmar presença" / "Cancelar"** → POST/DELETE; **UI otimista** (incrementa/decrementa
     local) confirmada via REST; reflete `confirmadoPorMim`.

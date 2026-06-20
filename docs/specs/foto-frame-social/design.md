@@ -100,8 +100,8 @@ Exemplo `FrameCatalogoDto`:
   ],
   "prefill": {
     "titulo": "Lages FC x Serrano",
-    "equipeCasa": { "nome": "Lages FC", "sigla": "LAG", "escudo": "🛡️", "corPrimaria": "#1f6feb" },
-    "equipeVisitante": { "nome": "Serrano", "sigla": "SER", "escudo": "🦁", "corPrimaria": "#C2EF4E" },
+    "equipeCasa": { "nome": "Lages FC", "sigla": "LAG", "escudo": "️", "corPrimaria": "#1f6feb" },
+    "equipeVisitante": { "nome": "Serrano", "sigla": "SER", "escudo": "", "corPrimaria": "#C2EF4E" },
     "placar": "3 x 1",
     "fraseSugerida": "Eu tô no jogo"
   }
@@ -110,7 +110,7 @@ Exemplo `FrameCatalogoDto`:
 
 ## Mobile (Arena Lages, MAUI)
 - **Botão de entrada** (componente reutilizável, estilo `ButtonAccent` lima de `Styles.xaml`):
-  - No `EventDetailPage`: "📸 Foto com frame". **Habilitado** em todo status **exceto `Cancelado`**
+  - No `EventDetailPage`: "Foto com frame". **Habilitado** em todo status **exceto `Cancelado`**
     (oculto/disabled). Não depende de `AoVivo` (diferente do botão "Interagir" da base).
 - **`FrameComposerPage` + `FrameComposerViewModel`** (`CommunityToolkit.Mvvm`):
   - Carrega `GET .../frames` → popula lista de frames e os campos (nome do time, placar, frase) via `prefill`.

@@ -14,7 +14,7 @@ public class Modalidade
     public string Slug { get; set; } = string.Empty;
 
     /// <summary>Emoji/ícone exibido nos cards e filtros.</summary>
-    public string Icone { get; set; } = "🏆";
+    public string Icone { get; set; } = string.Empty;
 
     /// <summary>Cor de destaque (hex) usada na identidade visual da modalidade.</summary>
     public string CorHex { get; set; } = "#1f6feb";

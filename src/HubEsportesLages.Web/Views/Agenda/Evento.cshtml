@@ -21,7 +21,7 @@
         <h1 style="max-width:24ch;">@Model.Titulo</h1>
         @if (!string.IsNullOrWhiteSpace(Model.Campeonato))
         {
-            <p class="lead" style="color:#d6e0ee; margin:0;">🏆 @Model.Campeonato</p>
+            <p class="lead" style="color:#d6e0ee; margin:0;">@Model.Campeonato</p>
         }
     </div>
 </section>
@@ -62,7 +62,7 @@
             </div>
 
             <div class="painel">
-                <h3>📍 Como chegar</h3>
+                <h3>Como chegar</h3>
                 <p class="muted">@Model.LocalNome — @Model.LocalEndereco@(string.IsNullOrWhiteSpace(Model.Bairro) ? "" : $", {Model.Bairro}"), Lages/SC.</p>
                 <a class="btn btn--outline" href="@Model.MapaUrl" target="_blank" rel="noopener">Abrir no Google Maps →</a>
             </div>
@@ -71,14 +71,13 @@
         <aside style="display:flex; flex-direction:column; gap:22px;">
             <div class="painel">
                 <ul class="info-list">
-                    <li><span class="ic">📅</span><div><div class="rot">Data e hora</div><div class="val">@DataLonga(Model.Inicio)</div></div></li>
-                    <li><span class="ic">📍</span><div><div class="rot">Local</div><div class="val">@Model.LocalNome</div></div></li>
+                    <li><div><div class="rot">Data e hora</div><div class="val">@DataLonga(Model.Inicio)</div></div></li>
+                    <li><div><div class="rot">Local</div><div class="val">@Model.LocalNome</div></div></li>
                     @if (Model.Capacidade is int cap)
                     {
-                        <li><span class="ic">👥</span><div><div class="rot">Capacidade</div><div class="val">@cap.ToString("N0") lugares</div></div></li>
+                        <li><div><div class="rot">Capacidade</div><div class="val">@cap.ToString("N0") lugares</div></div></li>
                     }
                     <li>
-                        <span class="ic">🎟️</span>
                         <div>
                             <div class="rot">Ingresso</div>
                             <div class="val">
@@ -97,7 +96,7 @@
             </div>
 
             <div class="cta">
-                <h2 style="font-size:1.3rem;">🔔 Avise-me</h2>
+                <h2 style="font-size:1.3rem;">Avise-me</h2>
                 <p style="margin-bottom:16px;">Receba um lembrete antes do início e o resultado deste evento.</p>
                 <a class="btn btn--primary btn--block" asp-controller="Notificacoes" asp-action="Index">Ativar notificações</a>
 
@@ -107,7 +106,7 @@
                     {
                         <a class="btn btn--amber btn--block" style="margin-top:12px;"
                            asp-controller="Torcida" asp-action="Index" asp-route-slug="@Model.Slug">
-                            🔴 Interagir com a Torcida
+                            Interagir com a Torcida
                         </a>
                     }
                     else if (Model.Status == StatusEvento.Encerrado)

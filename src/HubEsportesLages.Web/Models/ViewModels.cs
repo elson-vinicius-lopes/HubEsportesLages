@@ -45,4 +45,5 @@ public class AdminViewModel
     public IReadOnlyList<LocalDto> Locais { get; init; } = [];
     public IReadOnlyList<EquipeDto> Equipes { get; init; } = [];
     public IReadOnlyList<EventoResumoDto> Proximos { get; init; } = [];
+    public MetricasDashboardDto Metricas { get; set; } = new();
 }

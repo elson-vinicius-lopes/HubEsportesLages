@@ -27,4 +27,7 @@ public interface IEventoService
 
     /// <summary>Atualiza placar/encerramento e publica a notificação de resultado.</summary>
     Task<bool> AtualizarResultadoAsync(int id, AtualizarResultadoDto dto, CancellationToken ct = default);
+
+    /// <summary>Obtém as métricas gerais e dados sazonais do dashboard.</summary>
+    Task<MetricasDashboardDto> ObterMetricasDashboardAsync(CancellationToken ct = default);
 }

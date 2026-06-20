@@ -56,14 +56,14 @@ Leitura (`GET`) é liberada em qualquer status salvo indicação contrária — 
 
 | Feature | Agendado (pré) | AoVivo (durante) | Encerrado (pós) | Adiado / Cancelado | Método de domínio |
 |---|:--:|:--:|:--:|:--:|---|
-| **Palpite (placar)** | ✅ escreve | 🔒 409 | 🔒 409 | 🔒 409 | `Evento.AceitaPalpite => Status==Agendado` |
-| **Disputa (cabo de guerra)** | 🔒 409 | ✅ escreve | 🔒 409 | 🔒 409 | `Evento.AceitaDisputa => AceitaInteracao && EhConfronto` |
-| **Esquenta (pontos de encontro)** | ✅ escreve | 🔒 409 | 🔒 409 | 🔒 409 | `Evento.AceitaEsquenta => Status==Agendado` |
-| **Foto-frame social** | ✅ | ✅ | ✅ | 🔒 Cancelado→409 | `Evento.PermiteFrame => Status != Cancelado` |
-| **MVP / Jogador da Partida** (base + refino) | 🔒 | ✅ escreve | ✅ até congelar | 🔒 | `AceitaVotoMvp` (AoVivo **ou** Encerrado, até `VotacaoMvpEncerradaEm`) |
-| **Enquete (base)** | 🔒 | ✅ escreve | 🔒 (leitura) | 🔒 | `Enquete.AceitaVoto` (Ativa) |
-| **Enquete de intervalo** (refino) | 🔒 | ✅ + janela aberta | 🔒 | 🔒 | `AceitaInteracaoAoVivo` + ciclo `Aberta` |
-| **Mural / comentários + reações** (base + refino) | 🔒 | ✅ escreve | 🔒 (leitura) | 🔒 | `AceitaInteracaoAoVivo` |
+| **Palpite (placar)** | ✅ escreve | 409 | 409 | 409 | `Evento.AceitaPalpite => Status==Agendado` |
+| **Disputa (cabo de guerra)** | 409 | ✅ escreve | 409 | 409 | `Evento.AceitaDisputa => AceitaInteracao && EhConfronto` |
+| **Esquenta (pontos de encontro)** | ✅ escreve | 409 | 409 | 409 | `Evento.AceitaEsquenta => Status==Agendado` |
+| **Foto-frame social** | ✅ | ✅ | ✅ | Cancelado→409 | `Evento.PermiteFrame => Status != Cancelado` |
+| **MVP / Jogador da Partida** (base + refino) | | ✅ escreve | ✅ até congelar | | `AceitaVotoMvp` (AoVivo **ou** Encerrado, até `VotacaoMvpEncerradaEm`) |
+| **Enquete (base)** | | ✅ escreve | (leitura) | | `Enquete.AceitaVoto` (Ativa) |
+| **Enquete de intervalo** (refino) | | ✅ + janela aberta | | | `AceitaInteracaoAoVivo` + ciclo `Aberta` |
+| **Mural / comentários + reações** (base + refino) | | ✅ escreve | (leitura) | | `AceitaInteracaoAoVivo` |
 | **Favoritar equipe** (base) | ✅ qualquer | ✅ | ✅ | ✅ | sem gating (preferência do usuário) |
 
 **Insight de design:** as janelas são **complementares ao longo do tempo**, não conflitantes.

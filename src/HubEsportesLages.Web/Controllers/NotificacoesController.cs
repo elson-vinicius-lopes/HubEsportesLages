@@ -28,7 +28,7 @@ public class NotificacoesController(
 
         var registrada = await inscricoes.InscreverAsync(inscricao, ct);
         TempData["InscricaoOk"] =
-            $"Pronto, {registrada.Nome.Split(' ')[0]}! Você receberá as notificações do Hub Esportes Lages.";
+            $"Pronto, {registrada.Nome.Split(' ')[0]}! Você receberá as notificações do Bora pro Jogo.";
         return RedirectToAction(nameof(Index));
     }
 

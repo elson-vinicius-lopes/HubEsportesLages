@@ -90,8 +90,8 @@ por `Status == AoVivo` **e** por `Evento.EhConfronto`.
   "ehConfronto": true,
   "totalApoios": 184,
   "meuLado": "casa",
-  "casa":      { "equipeId": 3, "nome": "Time A", "sigla": "TMA", "escudo": "🦁", "corPrimaria": "#C2EF4E", "apoios": 114, "percentual": 62.0 },
-  "visitante": { "equipeId": 7, "nome": "Time B", "sigla": "TMB", "escudo": "🐺", "corPrimaria": "#FA7FAA", "apoios": 70,  "percentual": 38.0 }
+  "casa":      { "equipeId": 3, "nome": "Time A", "sigla": "TMA", "escudo": "", "corPrimaria": "#C2EF4E", "apoios": 114, "percentual": 62.0 },
+  "visitante": { "equipeId": 7, "nome": "Time B", "sigla": "TMB", "escudo": "", "corPrimaria": "#FA7FAA", "apoios": 70,  "percentual": 38.0 }
 }
 ```
 Push em tempo real: `DisputaAtualizada` carrega o mesmo `DisputaDto` (sem `meuLado`, que é por torcedor — o cliente preserva o seu).

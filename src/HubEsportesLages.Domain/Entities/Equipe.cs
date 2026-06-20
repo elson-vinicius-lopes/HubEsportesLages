@@ -16,7 +16,7 @@ public class Equipe
     public string Cidade { get; set; } = "Lages";
 
     /// <summary>Emoji/escudo simbólico exibido no card do confronto.</summary>
-    public string Escudo { get; set; } = "🛡️";
+    public string Escudo { get; set; } = string.Empty;
 
     public string CorPrimaria { get; set; } = "#1f6feb";
 }

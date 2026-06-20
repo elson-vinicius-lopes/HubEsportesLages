@@ -5,7 +5,7 @@
 
 <section class="detalhe-hero" style="background: linear-gradient(135deg, var(--azul-900), var(--verde));">
     <div class="container">
-        <h1>🔔 Central de notificações</h1>
+        <h1>Central de notificações</h1>
         <p class="lead" style="color:#e6f4ec; margin:0;">
             Acompanhe novos eventos, lembretes e resultados — e inscreva-se para receber alertas da sua equipe.
         </p>
@@ -22,7 +22,7 @@
             }
 
             <div class="sec-head">
-                <div><h2>Feed do hub</h2><p>As atualizações mais recentes da agenda esportiva.</p></div>
+                <div><h2>Feed do Bora pro Jogo</h2><p>As atualizações mais recentes da agenda esportiva.</p></div>
                 <form asp-action="MarcarLidas" method="post">
                     @Html.AntiForgeryToken()
                     <button class="btn btn--outline btn--sm" type="submit">Marcar todas como lidas</button>
@@ -54,7 +54,7 @@
             }
             else
             {
-                <div class="vazio"><span class="icone">📭</span> Nenhuma notificação ainda.</div>
+                <div class="vazio"><span class="icone">—</span> Nenhuma notificação ainda.</div>
             }
         </div>
 
@@ -103,7 +103,7 @@
                     <label class="check col-full"><input asp-for="Inscricao.ReceberEmail" type="checkbox" /> Receber por e-mail</label>
                     <label class="check col-full"><input asp-for="Inscricao.ReceberPush" type="checkbox" /> Receber notificações push</label>
                     <div class="col-full">
-                        <button class="btn btn--primary btn--block" type="submit">🔔 Quero ser notificado</button>
+                        <button class="btn btn--primary btn--block" type="submit">Quero ser notificado</button>
                     </div>
                 </form>
             </div>

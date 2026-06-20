@@ -71,7 +71,7 @@ Regra de domínio: escritas de interação exigem `Evento.Status == AoVivo` (mé
 
 ## Mobile (Arena Lages, MAUI)
 - **Botão de entrada** (componente reutilizável, estilo `ButtonAccent`/`ButtonGhost` de `Styles.xaml`):
-  - `AoVivo` → habilitado, "🔴 Interagir com a Torcida" (em EventDetailPage e na CheckInPage pós check-in).
+  - `AoVivo` → habilitado, "Interagir com a Torcida" (em EventDetailPage e na CheckInPage pós check-in).
   - `Agendado` → desabilitado + legenda "Disponível no início do jogo".
   - `Encerrado` → "Ver resultados" (abre a tela em modo leitura: MVP vencedor, % final, mural arquivado).
 - `InteractionPage` + `InteractionViewModel`:

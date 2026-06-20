@@ -23,7 +23,7 @@
         {
             <p class="lead" style="color:#d6e0ee; margin:0;">@Model.EquipeCasa × @Model.EquipeVisitante</p>
         }
-        <p class="lead" style="color:#d6e0ee; margin:6px 0 0;">📍 @Model.LocalNome — @DataLonga(Model.Inicio)</p>
+        <p class="lead" style="color:#d6e0ee; margin:6px 0 0;">@Model.LocalNome — @DataLonga(Model.Inicio)</p>
     </div>
 </section>
 
@@ -44,7 +44,7 @@
 
                 <!-- ── Jogador da Partida (MVP) ─────────────────────────── -->
                 <div class="painel">
-                    <h3>⭐ Jogador da Partida</h3>
+                    <h3>Jogador da Partida</h3>
                     <p class="muted" style="margin:0 0 14px;">Vote no destaque do confronto. Um voto por torcedor.</p>
                     <div id="mvpLista" class="torcida-opcoes">
                         <p class="muted">Carregando candidatos…</p>
@@ -53,7 +53,7 @@
 
                 <!-- ── Enquete ──────────────────────────────────────────── -->
                 <div class="painel">
-                    <h3>📊 Enquete da torcida</h3>
+                    <h3>Enquete da torcida</h3>
                     <div id="enquete">
                         <p class="muted">Carregando enquete…</p>
                     </div>
@@ -64,7 +64,7 @@
 
                 <!-- ── Favoritar equipe ─────────────────────────────────── -->
                 <div class="painel">
-                    <h3>❤️ Acompanhar equipe</h3>
+                    <h3>Acompanhar equipe</h3>
                     <p class="muted" style="margin:0 0 14px;">Favorite para receber os jogos da equipe.</p>
                     <div id="favoritos" class="torcida-opcoes">
                         <p class="muted">Carregando…</p>
@@ -73,11 +73,10 @@
 
                 <!-- ── Mural ────────────────────────────────────────────── -->
                 <div class="painel">
-                    <h3>💬 Mural da torcida</h3>
-                    <form id="muralForm" style="display:flex; gap:8px; margin:0 0 14px;">
+                    <h3>Mural da torcida</h3>
+                    <form id="muralForm">
                         <input id="muralTexto" class="campo" type="text" maxlength="140"
-                               placeholder="Mande sua torcida…" autocomplete="off"
-                               style="flex:1; padding:10px 12px; border:1px solid var(--borda); border-radius:var(--raio-sm);" />
+                               placeholder="Mande sua torcida…" autocomplete="off" />
                         <button id="muralBtn" class="btn btn--primary" type="submit">Enviar</button>
                     </form>
                     <div id="mural" class="torcida-mural">

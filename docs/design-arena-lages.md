@@ -25,7 +25,7 @@
 - **Pontuação secundária**: rosa `#FA7FAA` (ações destrutivas/favoritar).
 - **Tipografia de contraste extremo**: display gigante (Space Grotesk) reservado a heróis/campanha; UI calma em 16 px (Rubik). Quase sem meio-termo.
 - **Caps com tracking leve (~0.2 px)** em botões e eyebrows ("cadência de console").
-- **Cards planos, sem drop-shadow** decorativo. Profundidade vem de fotografia do esporte, textura (`Starfield`) e mascotes emoji flutuantes (🏆 ⚡ 🏟️).
+- **Cards planos, sem drop-shadow** decorativo. Profundidade vem de fotografia do esporte, textura (`Starfield`) e mascotes emoji flutuantes (⚡ ️).
 - **CTA single-primary** que inverte polaridade conforme o fundo; sempre lê como a ação mais forte.
 - **Feedback de toque marcante** (scale/opacity no press) e touch targets ≥ 44×44 px.
 - **Grade base 8 px**; ritmo de seção generoso em heróis, denso em superfícies transacionais.
@@ -430,7 +430,7 @@ Convenções de dados aplicadas a todas as telas:
 
 ### 4.1 SplashPage (`splash`)
 - **Propósito**: abertura/branding; entra automaticamente.
-- **Seções (cima→baixo)**: fundo `Starfield` escuro com mascotes flutuantes (🏆 topo-dir, ⚡ inf-esq); eyebrow "Plataforma Esportiva · Lages/SC"; display "ARENA **LAGES**" (LAGES em chip lima); subtítulo; botão inverso "Entrar na Arena →"; barra de loading animada (2,7 s).
+- **Seções (cima→baixo)**: fundo `Starfield` escuro com mascotes flutuantes (topo-dir, ⚡ inf-esq); eyebrow "Plataforma Esportiva · Lages/SC"; display "ARENA **LAGES**" (LAGES em chip lima); subtítulo; botão inverso "Entrar na Arena →"; barra de loading animada (2,7 s).
 - **Componentes**: `Grid` + `GraphicsView`/imagem de textura; `Label` Display; `Button` ButtonInverted; `ProgressBar`/animação.
 - **Dados/endpoint**: nenhum (100% estático/marketing).
 - **Entrada/saída**: entrada = launch do app; saída = `home` (timer ou botão).
@@ -439,7 +439,7 @@ Convenções de dados aplicadas a todas as telas:
 - **Propósito**: hub inicial; vitrine do evento ao vivo + próximos + atalhos.
 - **Seções**:
   1. Top bar: título "ARENA LAGES"; botões redondos lupa (busca) e gráfico (→ admin).
-  2. Herói de campanha (`Starfield`, mascote 🏟️): eyebrow "Temporada 2025", display "VIVA O **ESPORTE** DE LAGES."; CTAs "Ver eventos" (→ events) e "Check-in" (→ checkin).
+  2. Herói de campanha (`Starfield`, mascote ️): eyebrow "Temporada 2025", display "VIVA O **ESPORTE** DE LAGES."; CTAs "Ver eventos" (→ events) e "Check-in" (→ checkin).
   3. "Acontecendo agora" (ponto lima pulsante): card grande do evento ao vivo — imagem, badge "Ao Vivo", placar grande, nomes dos times, local. Toque → detail.
   4. "Próximos Eventos" (link "Ver todos" → events): até 3 cards compactos. Toque → detail.
   5. Faixa de estatísticas (3 colunas): Eventos / Check-ins / Torcedores. **Lacuna (ver §6).**
@@ -474,7 +474,7 @@ Convenções de dados aplicadas a todas as telas:
 ### 4.5 CheckInPage (`checkin`)
 - **Propósito**: confirmar presença via QR/manual; dois estados.
 - **Seções — Estado A (pendente)**: pill do evento (emoji, título, data·hora·local); bloco QR ("Apresente na entrada"), `QRCodeView`, código monospace "TOR-2025-{id}-A4B7"; divisor "ou confirme manualmente"; botão "Confirmar Presença".
-- **Seções — Estado B (sucesso)**: mascote 🎉, "CHECK-IN REALIZADO!"; dois cards de pontos ("+50 PTS" / "Total 400 PTS"); CTA "Interagir com a Torcida"; link "Voltar ao evento".
+- **Seções — Estado B (sucesso)**: mascote , "CHECK-IN REALIZADO!"; dois cards de pontos ("+50 PTS" / "Total 400 PTS"); CTA "Interagir com a Torcida"; link "Voltar ao evento".
 - **Componentes**: `Border` pill; `QRCodeView` (gerar QR real a partir de token da API); botões; alternância de estado via propriedade `IsDone` no ViewModel.
 - **Dados/endpoint**:
   - Dados do evento: do `slug` recebido.

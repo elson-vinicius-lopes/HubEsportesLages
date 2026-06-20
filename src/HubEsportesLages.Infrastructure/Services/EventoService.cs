@@ -205,4 +205,85 @@ public class EventoService(HubDbContext db, INotificacaoService notificacoes) : 
             _ => query.Where(e => e.Inicio >= hoje) // Proximos
         };
     }
+
+    public async Task<MetricasDashboardDto> ObterMetricasDashboardAsync(CancellationToken ct = default)
+    {
+        var totalEventos = await db.Eventos.CountAsync(ct);
+        var totalInscricoes = await db.Inscricoes.CountAsync(i => i.Ativa, ct);
+        var totalMensagensMural = await db.MensagensTorcida.CountAsync(m => !m.Removida, ct);
+        
+        var totalParticipantesAtivos = await db.MensagensTorcida.Where(m => !m.Removida).Select(m => m.TorcedorId)
+            .Union(db.VotosMvp.Select(v => v.TorcedorId))
+            .Union(db.VotosEnquete.Select(v => v.TorcedorId))
+            .Distinct()
+            .CountAsync(ct);
+            
+        var limiteInicio = DateTime.Today.AddYears(-1);
+        var datasEventos = await db.Eventos
+            .Where(e => e.Inicio >= limiteInicio)
+            .Select(e => e.Inicio)
+            .ToListAsync(ct);
+            
+        var eventosPorDia = datasEventos
+            .GroupBy(d => d.Date)
+            .Select(g => new MetricaSazonalDto
+            {
+                Data = g.Key,
+                QuantidadeEventos = g.Count()
+            })
+            .OrderBy(m => m.Data)
+            .ToList();
+            
+        var eventosRecentes = await db.Eventos
+            .Include(e => e.Modalidade)
+            .OrderByDescending(e => e.Inicio)
+            .Take(10)
+            .ToListAsync(ct);
+            
+        var idsEventos = eventosRecentes.Select(e => e.Id).ToList();
+        
+        var votosMvp = await db.VotosMvp
+            .Where(v => idsEventos.Contains(v.EventoId))
+            .Select(v => new { v.EventoId, v.TorcedorId })
+            .ToListAsync(ct);
+            
+        var mensagens = await db.MensagensTorcida
+            .Where(m => !m.Removida && idsEventos.Contains(m.EventoId))
+            .Select(m => new { m.EventoId, m.TorcedorId })
+            .ToListAsync(ct);
+            
+        var votosEnquete = await db.VotosEnquete
+            .Where(v => idsEventos.Contains(v.Enquete!.EventoId))
+            .Select(v => new { EventoId = v.Enquete!.EventoId, v.TorcedorId })
+            .ToListAsync(ct);
+            
+        var engajamentoPorEvento = new List<MetricaEngajamentoEventoDto>();
+        foreach (var ev in eventosRecentes)
+        {
+            var torcedoresDoEvento = votosMvp.Where(v => v.EventoId == ev.Id).Select(v => v.TorcedorId)
+                .Concat(mensagens.Where(m => m.EventoId == ev.Id).Select(m => m.TorcedorId))
+                .Concat(votosEnquete.Where(v => v.EventoId == ev.Id).Select(v => v.TorcedorId))
+                .Distinct()
+                .Count();
+                
+            engajamentoPorEvento.Add(new MetricaEngajamentoEventoDto
+            {
+                EventoId = ev.Id,
+                Titulo = ev.Titulo,
+                ModalidadeIcone = ev.Modalidade?.Icone ?? "⚽",
+                Inicio = ev.Inicio,
+                ParticipantesUnicos = torcedoresDoEvento
+            });
+        }
+        
+        return new MetricasDashboardDto
+        {
+            TotalEventos = totalEventos,
+            TotalInscricoes = totalInscricoes,
+            TotalParticipantesAtivos = totalParticipantesAtivos,
+            TotalMensagensMural = totalMensagensMural,
+            EventosPorDia = eventosPorDia,
+            EngajamentoPorEvento = engajamentoPorEvento
+        };
+    }
 }

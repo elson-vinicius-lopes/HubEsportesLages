@@ -27,9 +27,9 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Hub Esportes Lages — API",
+        Title = "Bora pro Jogo — API",
         Version = "v1",
-        Description = "API pública do hub central de agenda e notificações dos esportes de Lages/SC."
+        Description = "API pública da central de agenda e notificações dos esportes de Lages/SC."
     });
 });
 
@@ -52,8 +52,8 @@ app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Hub Esportes Lages — API v1");
-    options.DocumentTitle = "Hub Esportes Lages — API";
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Bora pro Jogo — API v1");
+    options.DocumentTitle = "Bora pro Jogo — API";
 });
 
 app.MapStaticAssets();

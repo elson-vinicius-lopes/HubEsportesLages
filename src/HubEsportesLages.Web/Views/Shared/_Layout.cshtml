@@ -7,16 +7,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@(ViewData["Title"] is null ? "Hub Esportes Lages" : ViewData["Title"] + " · Hub Esportes Lages")</title>
-    <meta name="description" content="Hub central de agenda e notificações dos esportes de Lages/SC. Acompanhe jogos, resultados e ative alertas da sua equipe." />
+    <title>@(ViewData["Title"] is null ? "Bora pro Jogo" : ViewData["Title"] + " · Bora pro Jogo")</title>
+    <meta name="description" content="Central de agenda e notificações dos esportes de Lages/SC. Acompanhe jogos, resultados e ative alertas da sua equipe." />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
     <div class="topbar">
         <div class="container">
-            <span>📍 Lages · Serra Catarinense</span>
+            <span>Lages · Serra Catarinense</span>
             <div class="topbar__links">
-                <a asp-controller="Notificacoes" asp-action="Index">🔔 Notificações</a>
+                <a asp-controller="Notificacoes" asp-action="Index">Notificações</a>
                 <a href="/swagger" target="_blank" rel="noopener">API</a>
                 <a asp-controller="Admin" asp-action="Index">Área do organizador</a>
             </div>
@@ -27,8 +27,8 @@
         <div class="container">
             <nav class="nav">
                 <a class="brand" asp-controller="Home" asp-action="Index">
-                    <span class="brand__logo">🏟️</span>
-                    <span>Hub Esportes <span class="brand__sub">Lages · SC</span></span>
+                    <span class="brand__logo"><img src="~/assets/2.jpeg" alt="Bora pro Jogo" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;" /></span>
+                    <span>Bora pro Jogo <span class="brand__sub">Lages · SC</span></span>
                 </a>
                 <button class="nav__toggle" id="navToggle" aria-label="Abrir menu">☰</button>
                 <div class="nav__links" id="navLinks">
@@ -39,7 +39,7 @@
                     <a class="@Ativo("Admin")" asp-controller="Admin" asp-action="Index">Organizador</a>
                 </div>
                 <div class="nav__spacer"></div>
-                <a class="btn btn--primary btn--sm" asp-controller="Notificacoes" asp-action="Index">🔔 Receber alertas</a>
+                <a class="btn btn--primary btn--sm" asp-controller="Notificacoes" asp-action="Index">Receber alertas</a>
             </nav>
         </div>
     </header>
@@ -52,12 +52,12 @@
         <div class="container">
             <div class="footer-grid">
                 <div>
-                    <div class="footer-brand"><span class="brand__logo">🏟️</span> Hub Esportes Lages</div>
-                    <p>O hub central da agenda esportiva de Lages. Reunimos jogos, corridas e competições de todas as modalidades para aproximar o torcedor das equipes da cidade.</p>
+                    <div class="footer-brand"><span class="brand__logo"><img src="~/assets/2.jpeg" alt="Bora pro Jogo" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;" /></span> Bora pro Jogo</div>
+                    <p>A central da agenda esportiva de Lages. Reunimos jogos, corridas e competições de todas as modalidades para aproximar o torcedor das equipes da cidade.</p>
                     <div class="footer-social">
-                        <a href="#" title="Instagram" aria-label="Instagram">📷</a>
-                        <a href="#" title="WhatsApp" aria-label="WhatsApp">💬</a>
-                        <a href="#" title="Facebook" aria-label="Facebook">👍</a>
+                        <a href="#" title="Instagram" aria-label="Instagram">Instagram</a>
+                        <a href="#" title="WhatsApp" aria-label="WhatsApp">WhatsApp</a>
+                        <a href="#" title="Facebook" aria-label="Facebook">Facebook</a>
                     </div>
                 </div>
                 <div>
@@ -81,8 +81,8 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <span>© 2026 Hub Esportes Lages · Projeto HackathOrion</span>
-                <span>Feito para a comunidade esportiva da Serra 💚</span>
+                <span>© 2026 Bora pro Jogo · Projeto HackathOrion</span>
+                <span>Feito para a comunidade esportiva da Serra</span>
             </div>
         </div>
     </footer>
