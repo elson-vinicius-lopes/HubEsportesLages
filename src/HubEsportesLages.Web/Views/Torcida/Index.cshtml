@@ -7,7 +7,7 @@
 <section class="detalhe-hero" style="@heroStyle">
     <div class="container">
         <a asp-controller="Agenda" asp-action="Evento" asp-route-slug="@Model.Slug" style="color:#d6e0ee; font-weight:600;">← Voltar para o evento</a>
-        <div style="display:flex; gap:10px; align-items:center; margin:14px 0 8px;">
+        <div class="hero-badge-row">
             <span class="card-evento__mod" style="position:static; background:rgba(255,255,255,.2);">@Model.ModalidadeIcone @Model.ModalidadeNome</span>
             @if (Model.Status == StatusEvento.AoVivo)
             {

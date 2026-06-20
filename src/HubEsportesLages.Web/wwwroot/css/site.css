@@ -336,22 +336,174 @@ h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .5rem; font-weight: 700; letter-s
 .cta h2 { font-size: 1.9rem; }
 .cta p { color: #d6e0ee; max-width: 52ch; margin: 8px auto 22px; }
 
-/* --------------------------------------------------- Responsivo */
-@media (max-width: 900px) {
-    .filtros form { grid-template-columns: 1fr 1fr; }
-    .detalhe-grid { grid-template-columns: 1fr; margin-top: 0; }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-    .form-grid { grid-template-columns: 1fr; }
+/* ================================================== Responsivo */
+
+/* -- Utilitários de layout de páginas (substituem inline styles) -- */
+.home-bottom-grid {
+    display: grid;
+    gap: 26px;
+    grid-template-columns: 1.4fr 1fr;
+    align-items: start;
 }
+.notif-layout-grid {
+    display: grid;
+    gap: 26px;
+    grid-template-columns: 1.5fr 1fr;
+    align-items: start;
+}
+/* admin-layout-grid já declarado no bloco Admin abaixo */
+
+/* -- Hero-badge-row (badge de modalidade + status no hero) -- */
+.hero-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin: 14px 0 8px;
+}
+
+/* ── Breakpoint ≤ 900px (tablet / landscape phone) ─────────── */
+@media (max-width: 900px) {
+    /* Filtros: 2 colunas + botão full-width */
+    .filtros form { grid-template-columns: 1fr 1fr; }
+    .filtros form .btn { grid-column: 1 / -1; }
+
+    /* Detalhe do evento: coluna única, sem margem negativa */
+    .detalhe-grid { grid-template-columns: 1fr; margin-top: 0; }
+
+    /* Footer: 2 colunas */
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+
+    /* Formulário genérico: coluna única */
+    .form-grid { grid-template-columns: 1fr; }
+
+    /* Layouts de página: coluna única */
+    .home-bottom-grid,
+    .notif-layout-grid,
+    .admin-layout-grid { grid-template-columns: 1fr; }
+
+    /* Dashboard admin: 2 colunas */
+    .dash-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Heatmap header: empilha */
+    .heatmap-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+
+/* ── Breakpoint ≤ 760px (celular landscape / grande) ────────── */
 @media (max-width: 760px) {
-    .nav__links { display: none; position: absolute; top: 70px; left: 0; right: 0; flex-direction: column; background: var(--azul-800); padding: 12px; gap: 4px; box-shadow: var(--sombra-lg); }
+    /* Nav: esconde links, exibe toggle */
+    .nav__links {
+        display: none;
+        position: absolute; top: 70px; left: 0; right: 0;
+        flex-direction: column;
+        background: var(--azul-800);
+        padding: 12px; gap: 4px;
+        box-shadow: var(--sombra-lg);
+        z-index: 100;
+    }
     .nav__links.aberto { display: flex; }
     .nav__links a { padding: 12px 14px; }
     .nav__toggle { display: block; }
+    /* Esconde a topbar em mobile */
     .topbar { display: none; }
+
+    /* Filtros: coluna única */
     .filtros form { grid-template-columns: 1fr; }
+
+    /* Footer: coluna única */
     .footer-grid { grid-template-columns: 1fr; }
-    .hero__inner { padding: 52px 0 44px; }
+
+    /* Hero: menos padding */
+    .hero__inner { padding: 48px 0 38px; }
+    .hero h1 { font-size: clamp(1.65rem, 6vw, 2.6rem); }
+    .hero p.lead { font-size: 1rem; }
+
+    /* Detalhe-hero: padding menor */
+    .detalhe-hero { padding: 32px 0; }
+
+    /* Cards: mínimo menor para não ultrapassar a tela */
+    .grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    .grid--2 { grid-template-columns: 1fr; }
+
+    /* Seção heading: empilha em vez de separar */
+    .sec-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+
+    /* Chips de período: quebra linha */
+    .chips-periodo { gap: 6px; }
+    .chip-periodo { padding: 7px 12px; font-size: .82rem; }
+
+    /* Botão CTA no nav: some para economizar espaço */
+    .nav > .btn { display: none; }
+}
+
+/* ── Breakpoint ≤ 540px (celular padrão ~390px) ─────────────── */
+@media (max-width: 540px) {
+    /* Padding de seções menor */
+    .section { padding: 36px 0; }
+    .section--tight { padding: 22px 0; }
+    .container { padding: 0 14px; }
+
+    /* Hero: ajustes */
+    .hero__inner { padding: 36px 0 30px; }
+    .hero__eyebrow { font-size: .74rem; padding: 5px 12px; }
+    .hero__search { padding: 8px; gap: 8px; }
+    .hero__search input { min-width: 0; width: 100%; }
+    .hero__stats { gap: 18px; margin-top: 24px; }
+    .hero__stat strong { font-size: 1.5rem; }
+    .hero__cta { gap: 8px; }
+    .hero__cta .btn { flex: 1; }
+
+    /* Detalhe-hero: padding mínimo */
+    .detalhe-hero { padding: 24px 0; }
+    .detalhe-hero h1 { font-size: 1.4rem; }
+
+    /* Chips de modalidade: smaller */
+    .mod-chip { padding: 7px 12px 7px 8px; }
+    .mod-chip__icon { width: 28px; height: 28px; font-size: .95rem; }
+
+    /* Cards: coluna única em telas muito pequenas */
+    .grid { grid-template-columns: 1fr; }
+
+    /* Paginação: botões menores */
+    .paginacao a, .paginacao span { min-width: 36px; height: 36px; padding: 0 8px; font-size: .86rem; }
+
+    /* Painéis e formulários */
+    .painel { padding: 16px; }
+    .painel h3 { font-size: 1.1rem; }
+    .form-grid { gap: 12px; }
+
+    /* Confronto: menos padding */
+    .confronto { padding: 10px; }
+    .confronto__escudo { font-size: 1.3rem; }
+    .placar-grande { gap: 14px; padding: 16px; }
+    .placar-grande__escudo { font-size: 2.2rem; }
+    .placar-grande__num { font-size: 2.2rem; }
+
+    /* Footer */
+    .footer-grid { gap: 20px; }
+    .site-footer .container { padding-top: 32px; padding-bottom: 20px; }
+
+    /* CTA banner */
+    .cta { padding: 28px 20px; }
+    .cta h2 { font-size: 1.4rem; }
+
+    /* Torcida interativa */
+    .torcida-opcoes { grid-template-columns: 1fr; }
+    #muralForm { flex-direction: column; }
+    #muralBtn { width: 100%; }
+
+    /* Dashboard admin */
+    .admin-layout-grid { gap: 16px; }
+    .dash-grid { grid-template-columns: 1fr; gap: 12px; }
+    .dash-card { padding: 16px; }
+    .dash-card__value { font-size: 1.8rem; }
+    .heatmap-container { padding: 14px; }
+    .heatmap-labels { font-size: 0.66rem; padding: 0; }
+    .heatmap-legend { flex-wrap: wrap; }
+    .table-panel { padding: 14px; }
+    .dash-table th, .dash-table td { padding: 9px 6px; font-size: 0.8rem; }
+    /* Oculta coluna Data em telas muito pequenas */
+    .dash-table th:nth-child(2), .dash-table td:nth-child(2) { display: none; }
 }
 
 /* --------------------------------------------------- Torcida Interativa */
@@ -495,17 +647,7 @@ h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .5rem; font-weight: 700; letter-s
     color: var(--texto);
 }
 
-@media (max-width: 480px) {
-    .torcida-opcoes {
-        grid-template-columns: 1fr;
-    }
-    #muralForm {
-        flex-direction: column;
-    }
-    #muralBtn {
-        width: 100%;
-    }
-}
+
 
 /* --------------------------------------------------- Dashboard Admin */
 .dash-grid {
@@ -674,4 +816,13 @@ h1, h2, h3, h4 { line-height: 1.2; margin: 0 0 .5rem; font-weight: 700; letter-s
     border-radius: 20px;
     font-weight: 700;
     font-size: 0.8rem;
+}
+
+/* --------------------------------------------------- Admin — Área do Organizador */
+.admin-layout-grid {
+    display: grid;
+    gap: 26px;
+    grid-template-columns: 1.5fr 1fr;
+    align-items: start;
+    margin-top: 32px;
 }
