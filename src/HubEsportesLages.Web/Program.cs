@@ -2,17 +2,45 @@ using HubEsportesLages.Application.Interfaces;
 using HubEsportesLages.Infrastructure;
 using HubEsportesLages.Web.BackgroundJobs;
 using HubEsportesLages.Web.Identidade;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.OpenApi;
+using Serilog;
+
+// Configura Serilog: console + arquivo diário na pasta logs/.
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Information()
+    .MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Warning)
+    .WriteTo.Console()
+    .WriteTo.File(
+        path: Path.Combine("logs", "hub-esportes-.log"),
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 30,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {SourceContext}: {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
+
+try
+{
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 
 // MVC (site) + API REST (controllers com [ApiController]).
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Admin/Login";
+        options.LogoutPath = "/Admin/Logout";
+        options.AccessDeniedPath = "/Admin/Login";
+        options.ExpireTimeSpan = TimeSpan.FromHours(2);
+    });
+
 // Camada de dados e serviços de aplicação (SQLite).
 var connectionString = builder.Configuration.GetConnectionString("Default")
                        ?? "Data Source=hubesportes.db";
-builder.Services.AddInfrastructure(connectionString);
+builder.Services.AddInfrastructure(connectionString, builder.Configuration);
 
 // Identidade anônima do torcedor (cabeçalho X-Torcedor-Id) usada pela interação da torcida.
 builder.Services.AddHttpContextAccessor();
@@ -46,6 +74,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Swagger disponível em /swagger (inclusive em produção para a demonstração).
@@ -69,3 +98,13 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
+
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Aplicação encerrada inesperadamente.");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

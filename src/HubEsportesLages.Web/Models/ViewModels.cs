@@ -47,3 +47,13 @@ public class AdminViewModel
     public IReadOnlyList<EventoResumoDto> Proximos { get; init; } = [];
     public MetricasDashboardDto Metricas { get; set; } = new();
 }
+
+/// <summary>Área do torcedor: dashboard de métricas, heatmap, engajamento e formulário de inscrição de alertas.</summary>
+public class ContaViewModel
+{
+    public IReadOnlyList<ModalidadeDto> Modalidades { get; init; } = [];
+    public IReadOnlyList<EquipeDto> Equipes { get; init; } = [];
+    public IReadOnlyList<EventoResumoDto> Proximos { get; init; } = [];
+    public MetricasDashboardDto Metricas { get; set; } = new();
+    public CriarInscricaoDto Inscricao { get; set; } = new();
+}

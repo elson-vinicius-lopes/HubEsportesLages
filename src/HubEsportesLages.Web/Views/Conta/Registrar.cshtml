@@ -1,0 +1,86 @@
+@{
+    ViewData["Title"] = "Criar Conta";
+}
+
+<section class="section hero" style="min-height: 80vh; display: grid; place-items: center;">
+    <div class="container" style="max-width: 460px; width: 100%;">
+        
+        <div class="painel" style="background: rgba(11, 37, 69, 0.9); backdrop-filter: blur(12px); border: 1.5px solid rgba(255, 255, 255, 0.15); box-shadow: var(--sombra-lg); color: #fff;">
+            
+            <div class="center" style="margin-bottom: 28px;">
+                <div class="brand__logo" style="margin: 0 auto 16px; width: 56px; height: 56px; font-size: 1.8rem; background: linear-gradient(135deg, var(--verde), var(--azul-600));">
+                    <img src="~/assets/logo.png" alt="Bora pro Jogo" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;" />
+                </div>
+                <h2 style="font-size: 1.8rem; margin: 0; color: #fff; font-weight: 700;">Criar Conta</h2>
+                <p class="muted" style="margin: 6px 0 0; color: #cbd5e1; font-size: 0.92rem;">Cadastre-se para acompanhar os eventos esportivos de Lages.</p>
+            </div>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alerta" style="background: rgba(220, 38, 38, 0.15); border: 1.5px solid var(--vermelho); color: #fecaca; margin-bottom: 20px;">
+                    <span>⚠️</span>
+                    <div style="font-size: 0.9rem;">
+                        @foreach (var modelState in ViewData.ModelState.Values)
+                        {
+                            foreach (var error in modelState.Errors)
+                            {
+                                <span>@error.ErrorMessage</span>
+                            }
+                        }
+                    </div>
+                </div>
+            }
+
+            <form asp-action="Registrar" asp-controller="Conta" method="post" style="display: flex; flex-direction: column; gap: 18px;">
+                @Html.AntiForgeryToken()
+
+                <div class="campo">
+                    <label for="nome" style="color: #cbd5e1; font-weight: 600; font-size: 0.78rem;">Nome completo</label>
+                    <input type="text" id="nome" name="nome" required placeholder="Ex.: João da Silva" 
+                           style="background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); color: #fff; font-size: 0.95rem; padding: 12px 14px;" />
+                </div>
+
+                <div class="campo">
+                    <label for="email" style="color: #cbd5e1; font-weight: 600; font-size: 0.78rem;">E-mail</label>
+                    <input type="email" id="email" name="email" required placeholder="Ex.: joao@email.com" 
+                           style="background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); color: #fff; font-size: 0.95rem; padding: 12px 14px;" />
+                </div>
+
+                <div class="campo">
+                    <label for="senha" style="color: #cbd5e1; font-weight: 600; font-size: 0.78rem;">Senha</label>
+                    <input type="password" id="senha" name="senha" required placeholder="Mínimo 6 caracteres" minlength="6"
+                           style="background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); color: #fff; font-size: 0.95rem; padding: 12px 14px;" />
+                </div>
+
+                <div class="campo">
+                    <label for="confirmarSenha" style="color: #cbd5e1; font-weight: 600; font-size: 0.78rem;">Confirmar senha</label>
+                    <input type="password" id="confirmarSenha" name="confirmarSenha" required placeholder="Repita a senha" 
+                           style="background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.15); color: #fff; font-size: 0.95rem; padding: 12px 14px;" />
+                </div>
+
+                <button class="btn btn--primary btn--block" type="submit" style="margin-top: 10px; padding: 13px; font-size: 1rem; border-radius: 12px;">
+                    Criar minha conta
+                </button>
+            </form>
+
+            <div class="center" style="margin-top: 24px;">
+                <span style="color: #94a3b8; font-size: 0.88rem;">Já tem uma conta?</span>
+                <a asp-controller="Conta" asp-action="Login" style="color: var(--verde); font-weight: 600; font-size: 0.88rem; margin-left: 6px; transition: color 0.2s;">
+                    Entrar
+                </a>
+            </div>
+
+            <div class="center" style="margin-top: 12px;">
+                <a href="/" style="color: var(--verde); font-weight: 600; font-size: 0.88rem; transition: color 0.2s;">
+                    ← Voltar para o início
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

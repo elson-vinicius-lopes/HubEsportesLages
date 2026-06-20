@@ -7,6 +7,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Serilog.AspNetCore" Version="*" />
+    <PackageReference Include="Serilog.Sinks.File" Version="*" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.2" />
   </ItemGroup>
 

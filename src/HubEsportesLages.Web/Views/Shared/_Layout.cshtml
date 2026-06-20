@@ -18,7 +18,25 @@
             <div class="topbar__links">
                 <a asp-controller="Notificacoes" asp-action="Index">Notificações</a>
                 <a href="/swagger" target="_blank" rel="noopener">API</a>
-                <a asp-controller="Admin" asp-action="Index">Área do organizador</a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <span style="color: #cbd5e1; margin-right: 6px;">Olá, @User.Identity.Name</span>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Admin" asp-action="Index" style="color: var(--verde); font-weight: bold; margin-right: 6px;">Painel Admin</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Conta" asp-action="Index" style="color: var(--verde); font-weight: bold; margin-right: 6px;">Meu Painel</a>
+                    }
+                    <a asp-controller="Conta" asp-action="Logout" style="color: #fda4af; font-weight: bold;">Sair</a>
+                }
+                else
+                {
+                    <a asp-controller="Conta" asp-action="Login">Entrar</a>
+                    <span style="color: rgba(255, 255, 255, 0.2);">|</span>
+                    <a asp-controller="Admin" asp-action="Index">Área do organizador</a>
+                }
             </div>
         </div>
     </div>
@@ -27,7 +45,7 @@
         <div class="container">
             <nav class="nav">
                 <a class="brand" asp-controller="Home" asp-action="Index">
-                    <span class="brand__logo"><img src="~/assets/2.jpeg" alt="Bora pro Jogo" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;" /></span>
+                    <span class="brand__logo"><img src="~/assets/logo.png" alt="Bora pro Jogo" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;" /></span>
                     <span>Bora pro Jogo <span class="brand__sub">Lages · SC</span></span>
                 </a>
                 <button class="nav__toggle" id="navToggle" aria-label="Abrir menu">☰</button>
@@ -36,7 +54,18 @@
                     <a class="@Ativo("Agenda")" asp-controller="Agenda" asp-action="Index">Agenda</a>
                     <a class="@Ativo("Resultados")" asp-controller="Resultados" asp-action="Index">Resultados</a>
                     <a class="@Ativo("Notificacoes")" asp-controller="Notificacoes" asp-action="Index">Notificações</a>
-                    <a class="@Ativo("Admin")" asp-controller="Admin" asp-action="Index">Organizador</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="@Ativo("Admin")" asp-controller="Admin" asp-action="Index">Painel Admin</a>
+                    }
+                    else if (User.IsInRole("Torcedor"))
+                    {
+                        <a class="@Ativo("Conta")" asp-controller="Conta" asp-action="Index">Meu Painel</a>
+                    }
+                    else
+                    {
+                        <a class="@Ativo("Admin")" asp-controller="Admin" asp-action="Index">Organizador</a>
+                    }
                 </div>
                 <div class="nav__spacer"></div>
                 <a class="btn btn--primary btn--sm" asp-controller="Notificacoes" asp-action="Index">Receber alertas</a>
@@ -52,7 +81,7 @@
         <div class="container">
             <div class="footer-grid">
                 <div>
-                    <div class="footer-brand"><span class="brand__logo"><img src="~/assets/2.jpeg" alt="Bora pro Jogo" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;" /></span> Bora pro Jogo</div>
+                    <div class="footer-brand"><span class="brand__logo"><img src="~/assets/logo.png" alt="Bora pro Jogo" style="width: 100%; height: 100%; object-fit: cover; border-radius: inherit;" /></span> Bora pro Jogo</div>
                     <p>A central da agenda esportiva de Lages. Reunimos jogos, corridas e competições de todas as modalidades para aproximar o torcedor das equipes da cidade.</p>
                     <div class="footer-social">
                         <a href="#" title="Instagram" aria-label="Instagram">Instagram</a>

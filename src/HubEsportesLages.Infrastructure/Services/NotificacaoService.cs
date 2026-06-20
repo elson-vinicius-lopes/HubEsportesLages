@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HubEsportesLages.Infrastructure.Services;
 
-public class NotificacaoService(HubDbContext db) : INotificacaoService
+public class NotificacaoService(HubDbContext db, IEmailService emailService) : INotificacaoService
 {
     public async Task<IReadOnlyList<NotificacaoDto>> ListarRecentesAsync(int quantidade = 20, CancellationToken ct = default)
     {
@@ -51,6 +51,18 @@ public class NotificacaoService(HubDbContext db) : INotificacaoService
         if (modalidadeId is not null)
             notificacao.Modalidade = await db.Modalidades.AsNoTracking().FirstOrDefaultAsync(m => m.Id == modalidadeId, ct);
 
+        // Envia e-mail via Resend (falhas são logadas sem interromper o fluxo).
+        var corpoHtml = $"""
+            <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #0b2545; color: #fff; border-radius: 12px; padding: 28px;">
+                <h2 style="margin: 0 0 12px; color: #22c55e;">🏟️ {titulo}</h2>
+                <p style="font-size: 1rem; color: #cbd5e1; line-height: 1.6;">{mensagem}</p>
+                <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.15); margin: 20px 0;" />
+                <p style="font-size: 0.82rem; color: #64748b;">Bora pro Jogo · Agenda esportiva de Lages/SC</p>
+            </div>
+            """;
+
+        await emailService.EnviarAsync($"🏟️ {titulo}", corpoHtml, ct: ct);
+
         return notificacao.ParaDto();
     }
 
@@ -80,16 +92,31 @@ public class NotificacaoService(HubDbContext db) : INotificacaoService
 
         foreach (var ev in candidatos)
         {
+            var titulo = $"Hoje: {ev.Titulo} ⏰";
+            var mensagem = $"Começa às {ev.Inicio:HH'h'mm} no {ev.Local?.Nome}. Prepare-se para torcer!";
+
             db.Notificacoes.Add(new Notificacao
             {
-                Titulo = $"Hoje: {ev.Titulo} ⏰",
-                Mensagem = $"Começa às {ev.Inicio:HH'h'mm} no {ev.Local?.Nome}. Prepare-se para torcer!",
+                Titulo = titulo,
+                Mensagem = mensagem,
                 Tipo = TipoNotificacao.Lembrete,
                 EventoId = ev.Id,
                 ModalidadeId = ev.ModalidadeId,
                 Importante = true,
                 CriadoEm = agora
             });
+
+            // Envia e-mail de lembrete via Resend.
+            var corpoHtml = $"""
+                <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 520px; margin: 0 auto; background: #0b2545; color: #fff; border-radius: 12px; padding: 28px;">
+                    <h2 style="margin: 0 0 12px; color: #22c55e;">⏰ {titulo}</h2>
+                    <p style="font-size: 1rem; color: #cbd5e1; line-height: 1.6;">{mensagem}</p>
+                    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.15); margin: 20px 0;" />
+                    <p style="font-size: 0.82rem; color: #64748b;">Bora pro Jogo · Agenda esportiva de Lages/SC</p>
+                </div>
+                """;
+
+            await emailService.EnviarAsync($"⏰ {titulo}", corpoHtml, ct: ct);
         }
 
         await db.SaveChangesAsync(ct);
