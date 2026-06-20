@@ -55,6 +55,8 @@ public static class MapeamentoExtensions
         e.EquipeCasa?.Escudo,
         e.EquipeVisitante?.Nome,
         e.EquipeVisitante?.Escudo,
+        e.EquipeCasaId,
+        e.EquipeVisitanteId,
         e.PlacarCasa,
         e.PlacarVisitante,
         e.Placar,

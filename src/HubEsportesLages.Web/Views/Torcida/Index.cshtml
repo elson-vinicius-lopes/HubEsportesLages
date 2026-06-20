@@ -1,0 +1,94 @@
+@model EventoDetalheDto
+@{
+    ViewData["Title"] = $"Torcida · {Model.Titulo}";
+    var heroStyle = $"background: linear-gradient(135deg, {Model.ModalidadeCor}, var(--azul-800));";
+}
+
+<section class="detalhe-hero" style="@heroStyle">
+    <div class="container">
+        <a asp-controller="Agenda" asp-action="Evento" asp-route-slug="@Model.Slug" style="color:#d6e0ee; font-weight:600;">← Voltar para o evento</a>
+        <div style="display:flex; gap:10px; align-items:center; margin:14px 0 8px;">
+            <span class="card-evento__mod" style="position:static; background:rgba(255,255,255,.2);">@Model.ModalidadeIcone @Model.ModalidadeNome</span>
+            @if (Model.Status == StatusEvento.AoVivo)
+            {
+                <span class="badge badge--aovivo"><span class="dot"></span> AO VIVO</span>
+            }
+            else
+            {
+                <span class="badge @StatusClasse(Model.Status)">@StatusTexto(Model.Status)</span>
+            }
+        </div>
+        <h1 style="max-width:24ch;">@Model.Titulo</h1>
+        @if (Model.EhConfronto)
+        {
+            <p class="lead" style="color:#d6e0ee; margin:0;">@Model.EquipeCasa × @Model.EquipeVisitante</p>
+        }
+        <p class="lead" style="color:#d6e0ee; margin:6px 0 0;">📍 @Model.LocalNome — @DataLonga(Model.Inicio)</p>
+    </div>
+</section>
+
+<section class="section--tight">
+    <div class="container"
+         id="torcida"
+         data-slug="@Model.Slug"
+         data-ao-vivo="@(Model.Status == StatusEvento.AoVivo ? "true" : "false")"
+         data-equipe-casa-id="@Model.EquipeCasaId"
+         data-equipe-casa-nome="@Model.EquipeCasa"
+         data-equipe-visitante-id="@Model.EquipeVisitanteId"
+         data-equipe-visitante-nome="@Model.EquipeVisitante">
+
+        <div id="torcidaAviso" class="painel" style="display:none; margin-bottom:22px; border-left:4px solid var(--ambar);"></div>
+
+        <div class="detalhe-grid" style="margin-top:0;">
+            <div style="display:flex; flex-direction:column; gap:22px;">
+
+                <!-- ── Jogador da Partida (MVP) ─────────────────────────── -->
+                <div class="painel">
+                    <h3>⭐ Jogador da Partida</h3>
+                    <p class="muted" style="margin:0 0 14px;">Vote no destaque do confronto. Um voto por torcedor.</p>
+                    <div id="mvpLista" class="torcida-opcoes">
+                        <p class="muted">Carregando candidatos…</p>
+                    </div>
+                </div>
+
+                <!-- ── Enquete ──────────────────────────────────────────── -->
+                <div class="painel">
+                    <h3>📊 Enquete da torcida</h3>
+                    <div id="enquete">
+                        <p class="muted">Carregando enquete…</p>
+                    </div>
+                </div>
+            </div>
+
+            <aside style="display:flex; flex-direction:column; gap:22px;">
+
+                <!-- ── Favoritar equipe ─────────────────────────────────── -->
+                <div class="painel">
+                    <h3>❤️ Acompanhar equipe</h3>
+                    <p class="muted" style="margin:0 0 14px;">Favorite para receber os jogos da equipe.</p>
+                    <div id="favoritos" class="torcida-opcoes">
+                        <p class="muted">Carregando…</p>
+                    </div>
+                </div>
+
+                <!-- ── Mural ────────────────────────────────────────────── -->
+                <div class="painel">
+                    <h3>💬 Mural da torcida</h3>
+                    <form id="muralForm" style="display:flex; gap:8px; margin:0 0 14px;">
+                        <input id="muralTexto" class="campo" type="text" maxlength="140"
+                               placeholder="Mande sua torcida…" autocomplete="off"
+                               style="flex:1; padding:10px 12px; border:1px solid var(--borda); border-radius:var(--raio-sm);" />
+                        <button id="muralBtn" class="btn btn--primary" type="submit">Enviar</button>
+                    </form>
+                    <div id="mural" class="torcida-mural">
+                        <p class="muted">Carregando mensagens…</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/torcida.js" asp-append-version="true"></script>
+}

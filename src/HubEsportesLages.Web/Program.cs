@@ -58,6 +58,9 @@ app.UseSwaggerUI(options =>
 
 app.MapStaticAssets();
 
+// Resolve a identidade anônima do torcedor (X-Torcedor-Id) antes das rotas de API.
+app.UseMiddleware<TorcedorIdentidadeMiddleware>();
+
 // Rotas de API (atributos) + rota MVC padrão.
 app.MapControllers();
 app.MapControllerRoute(

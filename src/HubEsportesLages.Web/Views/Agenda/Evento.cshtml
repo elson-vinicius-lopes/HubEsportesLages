@@ -100,6 +100,31 @@
                 <h2 style="font-size:1.3rem;">🔔 Avise-me</h2>
                 <p style="margin-bottom:16px;">Receba um lembrete antes do início e o resultado deste evento.</p>
                 <a class="btn btn--primary btn--block" asp-controller="Notificacoes" asp-action="Index">Ativar notificações</a>
+
+                @if (Model.EhConfronto)
+                {
+                    @if (Model.Status == StatusEvento.AoVivo)
+                    {
+                        <a class="btn btn--amber btn--block" style="margin-top:12px;"
+                           asp-controller="Torcida" asp-action="Index" asp-route-slug="@Model.Slug">
+                            🔴 Interagir com a Torcida
+                        </a>
+                    }
+                    else if (Model.Status == StatusEvento.Encerrado)
+                    {
+                        <a class="btn btn--light btn--block" style="margin-top:12px;"
+                           asp-controller="Torcida" asp-action="Index" asp-route-slug="@Model.Slug">
+                            Ver resultados da torcida
+                        </a>
+                    }
+                    else
+                    {
+                        <button class="btn btn--light btn--block" style="margin-top:12px; opacity:.6; cursor:not-allowed;" disabled>
+                            Interagir com a Torcida
+                        </button>
+                        <p style="margin:8px 0 0; font-size:.82rem; color:#d6e0ee;">Disponível quando o jogo começar.</p>
+                    }
+                }
             </div>
         </aside>
     </div>

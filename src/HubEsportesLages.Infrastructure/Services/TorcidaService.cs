@@ -50,7 +50,7 @@ public class TorcidaService(HubDbContext db, ITorcedorContexto torcedor) : ITorc
                 EventoId = evento.Id,
                 JogadorEventoId = dto.JogadorEventoId,
                 TorcedorId = torcedorId,
-                CriadoEm = DateTime.Now
+                CriadoEm = DateTime.UtcNow
             });
             await SalvarIdempotenteAsync(ct);
         }
@@ -84,7 +84,7 @@ public class TorcidaService(HubDbContext db, ITorcedorContexto torcedor) : ITorc
                 EnqueteId = enqueteId,
                 OpcaoEnqueteId = dto.OpcaoId,
                 TorcedorId = torcedorId,
-                CriadoEm = DateTime.Now
+                CriadoEm = DateTime.UtcNow
             });
             await SalvarIdempotenteAsync(ct);
         }
@@ -123,7 +123,7 @@ public class TorcidaService(HubDbContext db, ITorcedorContexto torcedor) : ITorc
             .OrderByDescending(m => m.CriadoEm)
             .Select(m => (DateTime?)m.CriadoEm)
             .FirstOrDefaultAsync(ct);
-        if (ultima is DateTime quando && DateTime.Now - quando < IntervaloMinimoMensagem)
+        if (ultima is DateTime quando && DateTime.UtcNow - quando < IntervaloMinimoMensagem)
             return ResultadoInteracao<MensagemDto>.Falha(StatusInteracao.LimiteExcedido);
 
         var mensagem = new MensagemTorcida
@@ -132,7 +132,7 @@ public class TorcidaService(HubDbContext db, ITorcedorContexto torcedor) : ITorc
             TorcedorId = torcedorId,
             Autor = DerivarApelido(torcedorId),
             Texto = texto,
-            CriadoEm = DateTime.Now
+            CriadoEm = DateTime.UtcNow
         };
         db.MensagensTorcida.Add(mensagem);
         await db.SaveChangesAsync(ct);
@@ -157,7 +157,7 @@ public class TorcidaService(HubDbContext db, ITorcedorContexto torcedor) : ITorc
             {
                 TorcedorId = torcedorId,
                 EquipeId = equipeId,
-                CriadoEm = DateTime.Now
+                CriadoEm = DateTime.UtcNow
             });
             await SalvarIdempotenteAsync(ct);
         }
@@ -307,8 +307,11 @@ public class TorcidaService(HubDbContext db, ITorcedorContexto torcedor) : ITorc
         {
             await db.SaveChangesAsync(ct);
         }
-        catch (DbUpdateException)
+        catch (DbUpdateException ex) when (
+            ex.InnerException is Microsoft.Data.Sqlite.SqliteException sqlite && sqlite.SqliteErrorCode == 19)
         {
+            // 19 = SQLITE_CONSTRAINT (índice único): outro voto do mesmo torcedor já entrou.
+            // Trata como idempotência; demais falhas de persistência propagam.
             db.ChangeTracker.Clear();
         }
     }

@@ -31,6 +31,7 @@ public class TorcidaApiController(ITorcidaService torcida) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> VotarMvp(string slug, [FromBody] VotarMvpDto dto, CancellationToken ct)
         => Estado(await torcida.VotarMvpAsync(slug, dto, ct));
 
@@ -40,6 +41,7 @@ public class TorcidaApiController(ITorcidaService torcida) : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> VotarEnquete(string slug, int enqueteId, [FromBody] VotarEnqueteDto dto, CancellationToken ct)
         => Estado(await torcida.VotarEnqueteAsync(slug, enqueteId, dto, ct));
 

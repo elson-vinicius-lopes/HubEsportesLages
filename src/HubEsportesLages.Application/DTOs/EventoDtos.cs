@@ -51,6 +51,8 @@ public record EventoDetalheDto(
     string? EquipeCasaEscudo,
     string? EquipeVisitante,
     string? EquipeVisitanteEscudo,
+    int? EquipeCasaId,
+    int? EquipeVisitanteId,
     int? PlacarCasa,
     int? PlacarVisitante,
     string? Placar,
