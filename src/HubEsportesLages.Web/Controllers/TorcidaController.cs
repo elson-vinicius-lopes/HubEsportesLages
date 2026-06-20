@@ -1,4 +1,5 @@
 using HubEsportesLages.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HubEsportesLages.Web.Controllers;
@@ -8,6 +9,7 @@ namespace HubEsportesLages.Web.Controllers;
 /// O controller só monta o cabeçalho do evento; os dados de votação chegam via JS
 /// consumindo <c>/api/eventos/{slug}/torcida</c>.
 /// </summary>
+[Authorize]
 public class TorcidaController(IEventoService eventos) : Controller
 {
     [HttpGet("Torcida/Evento/{slug}")]

@@ -13,7 +13,7 @@ namespace HubEsportesLages.Web.Controllers;
 /// Área de gestão (organizadores/Fundação Municipal de Esportes) para publicar
 /// novos eventos na agenda. Protegido por autenticação de cookies.
 /// </summary>
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class AdminController(IEventoService eventos, ICatalogoService catalogo, IEmailService emailService) : Controller
 {
     public async Task<IActionResult> Index(CancellationToken ct)

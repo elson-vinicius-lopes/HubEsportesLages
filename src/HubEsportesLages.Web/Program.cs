@@ -31,10 +31,38 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Admin/Login";
-        options.LogoutPath = "/Admin/Logout";
-        options.AccessDeniedPath = "/Admin/Login";
+        options.LoginPath = "/conta/login";
+        options.LogoutPath = "/conta/logout";
+        options.AccessDeniedPath = "/conta/login";
         options.ExpireTimeSpan = TimeSpan.FromHours(2);
+        options.Events = new CookieAuthenticationEvents
+        {
+            OnRedirectToLogin = context =>
+            {
+                var returnUrl = context.Request.Path + context.Request.QueryString;
+                if (context.Request.Path.StartsWithSegments("/admin"))
+                {
+                    context.Response.Redirect("/admin/login?returnUrl=" + Uri.EscapeDataString(returnUrl));
+                }
+                else
+                {
+                    context.Response.Redirect("/conta/login?returnUrl=" + Uri.EscapeDataString(returnUrl));
+                }
+                return Task.CompletedTask;
+            },
+            OnRedirectToAccessDenied = context =>
+            {
+                if (context.Request.Path.StartsWithSegments("/admin"))
+                {
+                    context.Response.Redirect("/admin/login");
+                }
+                else
+                {
+                    context.Response.Redirect("/conta/login");
+                }
+                return Task.CompletedTask;
+            }
+        };
     });
 
 // Camada de dados e serviços de aplicação (SQLite).

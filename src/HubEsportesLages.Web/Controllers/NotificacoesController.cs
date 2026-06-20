@@ -1,10 +1,12 @@
 using HubEsportesLages.Application.DTOs;
 using HubEsportesLages.Application.Interfaces;
 using HubEsportesLages.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HubEsportesLages.Web.Controllers;
 
+[Authorize]
 public class NotificacoesController(
     INotificacaoService notificacoes,
     ICatalogoService catalogo,
