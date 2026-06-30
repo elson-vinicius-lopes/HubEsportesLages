@@ -22,9 +22,24 @@ public static class DependencyInjection
         services.AddScoped<ITorcidaService, TorcidaService>();
         services.AddScoped<IModeracaoService, ModeracaoService>();
 
-        // Resend — envio de e-mails nas notificações.
+        // Ingressos (QR + Pix simulado): token assinado, gateway mock e orquestração.
+        services.AddSingleton<ITokenIngresso, TokenIngresso>();
+        services.AddSingleton<IPagamentoService, MockPixPagamentoService>();
+        services.AddScoped<IIngressoService, IngressoService>();
+
+        // E-mail: por padrão registra no log (dev/visível, sem segredo). Use Resend só quando
+        // Email:Provedor=Resend E a key estiver configurada (via variável de ambiente / user-secrets).
         services.Configure<ResendSettings>(configuration.GetSection(ResendSettings.SectionName));
-        services.AddScoped<IEmailService, ResendEmailService>();
+        var provedorEmail = configuration["Email:Provedor"] ?? "Log";
+        if (string.Equals(provedorEmail, "Resend", StringComparison.OrdinalIgnoreCase)
+            && !string.IsNullOrWhiteSpace(configuration["Resend:ApiKey"]))
+        {
+            services.AddScoped<IEmailService, ResendEmailService>();
+        }
+        else
+        {
+            services.AddScoped<IEmailService, LogEmailService>();
+        }
 
         return services;
     }

@@ -95,6 +95,31 @@
                 </ul>
             </div>
 
+            @if (!Model.Gratuito)
+            {
+                <div class="painel painel--ingresso">
+                    <h3 style="margin-top:0;">Ingresso</h3>
+                    <p class="muted" style="margin-top:0;">
+                        Garanta sua entrada com pagamento via Pix e ingresso digital com QR-Code.
+                    </p>
+                    <div class="ingresso-preco">@(Model.PrecoIngresso is decimal pi ? Moeda(pi) : "Pago")</div>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <a class="btn btn--primary btn--block" asp-controller="Ingressos" asp-action="Comprar" asp-route-eventoId="@Model.Id">
+                            Comprar ingresso
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn--primary btn--block"
+                           asp-controller="Conta" asp-action="Login"
+                           asp-route-returnUrl="@Url.Action("Comprar", "Ingressos", new { eventoId = Model.Id })">
+                            Entrar para comprar
+                        </a>
+                    }
+                </div>
+            }
+
             <div class="cta">
                 <h2 style="font-size:1.3rem;">Avise-me</h2>
                 <p style="margin-bottom:16px;">Receba um lembrete antes do início e o resultado deste evento.</p>

@@ -1,0 +1,28 @@
+@model IngressoEmitidoDto
+@{
+    ViewData["Title"] = "Ingresso emitido";
+}
+
+<section class="detalhe-hero" style="background: linear-gradient(135deg, var(--azul-900), var(--verde));">
+    <div class="container">
+        <h1>Ingresso confirmado!</h1>
+        <p class="lead" style="color:#e6f4ec; margin:0;">@Model.EventoTitulo</p>
+    </div>
+</section>
+
+<section class="section--tight">
+    <div class="container" style="max-width:560px;">
+        <div class="painel ingresso-qr-card">
+            <div class="alerta alerta--ok" style="margin-bottom:18px;">✅ Pagamento confirmado. Apresente este QR na entrada.</div>
+
+            <div class="qr-box">
+                <img src="data:image/png;base64,@Model.QrIngressoBase64" alt="QR do ingresso" width="240" height="240" />
+            </div>
+
+            <label class="rot" style="display:block; margin-bottom:6px;">Código do ingresso</label>
+            <textarea class="pix-copia" readonly rows="2" onclick="this.select()">@Model.Token</textarea>
+
+            <a class="btn btn--outline btn--block" style="margin-top:18px;" asp-controller="Ingressos" asp-action="Meus">Ver meus ingressos</a>
+        </div>
+    </div>
+</section>

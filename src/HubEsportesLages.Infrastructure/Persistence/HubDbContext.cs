@@ -19,6 +19,7 @@ public class HubDbContext(DbContextOptions<HubDbContext> options) : DbContext(op
     public DbSet<VotoEnquete> VotosEnquete => Set<VotoEnquete>();
     public DbSet<MensagemTorcida> MensagensTorcida => Set<MensagemTorcida>();
     public DbSet<EquipeFavorita> EquipesFavoritas => Set<EquipeFavorita>();
+    public DbSet<Ingresso> Ingressos => Set<Ingresso>();
 
     protected override void OnModelCreating(ModelBuilder b)
     {
@@ -220,6 +221,26 @@ public class HubDbContext(DbContextOptions<HubDbContext> options) : DbContext(op
             e.HasOne(x => x.Equipe)
                 .WithMany()
                 .HasForeignKey(x => x.EquipeId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // ----------------------------------------------------- Ingresso (QR + Pix simulado)
+        b.Entity<Ingresso>(e =>
+        {
+            e.Property(x => x.CompradorId).HasMaxLength(160).IsRequired();
+            e.Property(x => x.CompradorNome).HasMaxLength(120).IsRequired();
+            e.Property(x => x.Preco).HasPrecision(10, 2);
+            e.Property(x => x.Token).HasMaxLength(200);
+            e.Property(x => x.TxidPix).HasMaxLength(64);
+            e.Property(x => x.ValidadoPor).HasMaxLength(160);
+
+            e.HasIndex(x => x.CompradorId);
+            // Token único quando presente (ingressos pendentes ainda não têm token).
+            e.HasIndex(x => x.Token).IsUnique();
+
+            e.HasOne(x => x.Evento)
+                .WithMany()
+                .HasForeignKey(x => x.EventoId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
     }

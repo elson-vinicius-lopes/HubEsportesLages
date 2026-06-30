@@ -1,0 +1,112 @@
+@{
+    ViewData["Title"] = "Validar ingressos";
+}
+
+<section class="detalhe-hero" style="background: linear-gradient(135deg, var(--azul-900), var(--azul-800));">
+    <div class="container">
+        <h1>Validação na entrada</h1>
+        <p class="lead" style="color:#d6e0ee; margin:0;">Escaneie o QR do ingresso ou cole o código. Uso único.</p>
+    </div>
+</section>
+
+<section class="section--tight">
+    <div class="container" style="max-width:620px;">
+
+        <div id="resultado" class="validacao-resultado" hidden></div>
+
+        <div class="painel">
+            <h3 style="margin-top:0;">Código do ingresso</h3>
+            <p class="muted" style="margin-top:0;">Cole ou digite o token e valide. Funciona sempre, mesmo sem câmera.</p>
+            <form id="formManual">
+                <textarea id="tokenManual" class="pix-copia" rows="3" placeholder="Cole o código do ingresso aqui..."></textarea>
+                <button class="btn btn--primary btn--block" type="submit" style="margin-top:12px;">Validar entrada</button>
+            </form>
+        </div>
+
+        <div class="painel" style="margin-top:18px;">
+            <div class="sec-head" style="margin-bottom:8px;">
+                <div><h3 style="margin:0;">Leitura por câmera</h3><p class="muted" style="margin:0;">Opcional — exige permissão de câmera (HTTPS).</p></div>
+                <button class="btn btn--outline btn--sm" type="button" id="btnCamera">Ligar câmera</button>
+            </div>
+            <div id="leitor" style="display:none; max-width:340px; margin:0 auto;"></div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/lib/html5-qrcode/html5-qrcode.min.js" asp-append-version="true"></script>
+    <script>
+        (function () {
+            const resultado = document.getElementById('resultado');
+
+            function mostrar(ok, dados) {
+                resultado.hidden = false;
+                resultado.className = 'validacao-resultado ' + (ok ? 'validacao-resultado--ok' : 'validacao-resultado--erro');
+                const titulo = ok ? '✅ ENTRADA LIBERADA' : '❌ NÃO LIBERADO';
+                const evento = dados.eventoTitulo ? `<div class="vr-linha">Evento: <strong>${dados.eventoTitulo}</strong></div>` : '';
+                const torcedor = dados.compradorNome ? `<div class="vr-linha">Torcedor: <strong>${dados.compradorNome}</strong></div>` : '';
+                resultado.innerHTML = `<div class="vr-titulo">${titulo}</div><div class="vr-msg">${dados.mensagem || ''}</div>${evento}${torcedor}`;
+                resultado.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            async function validar(token) {
+                if (!token || !token.trim()) return;
+                try {
+                    const r = await fetch('/api/ingressos/validar', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({ token: token.trim() })
+                    });
+                    if (r.status === 403) { mostrar(false, { mensagem: 'Acesso negado: apenas administradores validam ingressos.' }); return; }
+                    if (!r.ok) { mostrar(false, { mensagem: 'Erro ao validar (HTTP ' + r.status + ').' }); return; }
+                    const dados = await r.json();
+                    mostrar(dados.valido === true, dados);
+                } catch (e) {
+                    mostrar(false, { mensagem: 'Falha de rede ao validar.' });
+                }
+            }
+
+            document.getElementById('formManual').addEventListener('submit', function (ev) {
+                ev.preventDefault();
+                validar(document.getElementById('tokenManual').value);
+            });
+
+            // Câmera (opcional) via html5-qrcode.
+            let leitor = null;
+            const btn = document.getElementById('btnCamera');
+            const caixa = document.getElementById('leitor');
+            btn.addEventListener('click', async function () {
+                if (typeof Html5Qrcode === 'undefined') {
+                    mostrar(false, { mensagem: 'Biblioteca de câmera indisponível. Use o campo manual.' });
+                    return;
+                }
+                if (leitor) {
+                    try { await leitor.stop(); } catch (e) { }
+                    leitor = null;
+                    caixa.style.display = 'none';
+                    btn.textContent = 'Ligar câmera';
+                    return;
+                }
+                caixa.style.display = 'block';
+                btn.textContent = 'Desligar câmera';
+                leitor = new Html5Qrcode('leitor');
+                try {
+                    await leitor.start({ facingMode: 'environment' }, { fps: 10, qrbox: 240 },
+                        async (texto) => {
+                            await leitor.stop();
+                            leitor = null;
+                            caixa.style.display = 'none';
+                            btn.textContent = 'Ligar câmera';
+                            validar(texto);
+                        }, () => { });
+                } catch (e) {
+                    caixa.style.display = 'none';
+                    btn.textContent = 'Ligar câmera';
+                    leitor = null;
+                    mostrar(false, { mensagem: 'Não foi possível acessar a câmera. Use o campo manual.' });
+                }
+            });
+        })();
+    </script>
+}

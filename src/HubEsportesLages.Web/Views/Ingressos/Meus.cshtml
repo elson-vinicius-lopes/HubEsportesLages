@@ -1,0 +1,86 @@
+@model IReadOnlyList<IngressoDto>
+@using HubEsportesLages.Domain.Enums
+@{
+    ViewData["Title"] = "Meus ingressos";
+
+    string StatusBadge(StatusIngresso s) => s switch
+    {
+        StatusIngresso.Pendente => "badge--pago",
+        StatusIngresso.Pago => "badge--gratis",
+        StatusIngresso.Utilizado => "badge--encerrado",
+        StatusIngresso.Cancelado => "badge--cancelado",
+        _ => "badge--agendado"
+    };
+
+    string StatusTxt(StatusIngresso s) => s switch
+    {
+        StatusIngresso.Pendente => "Aguardando pagamento",
+        StatusIngresso.Pago => "Pago — pronto para uso",
+        StatusIngresso.Utilizado => "Utilizado",
+        StatusIngresso.Cancelado => "Cancelado",
+        _ => s.ToString()
+    };
+}
+
+<section class="detalhe-hero" style="background: linear-gradient(135deg, var(--azul-900), var(--verde));">
+    <div class="container">
+        <h1>Meus ingressos</h1>
+        <p class="lead" style="color:#e6f4ec; margin:0;">Seus ingressos digitais e o QR para a entrada.</p>
+    </div>
+</section>
+
+<section class="section--tight">
+    <div class="container">
+        @if (TempData["IngressoErro"] is string erro)
+        {
+            <div class="alerta" style="background:#fee2e2; color:#b91c1c; margin-bottom:18px;">@erro</div>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="painel">
+                <p class="muted" style="margin:0;">Você ainda não comprou ingressos. Explore a
+                    <a asp-controller="Agenda" asp-action="Index">agenda</a> e garanta sua entrada nos eventos pagos.</p>
+            </div>
+        }
+        else
+        {
+            <div class="ingressos-grid">
+                @foreach (var i in Model)
+                {
+                    <div class="painel ingresso-item">
+                        <div class="ingresso-item__topo">
+                            <span class="badge @StatusBadge(i.Status)">@StatusTxt(i.Status)</span>
+                            <span class="ingresso-preco-mini">@Moeda(i.Preco)</span>
+                        </div>
+                        <h3 style="margin:10px 0 4px;">@i.EventoTitulo</h3>
+                        <p class="muted" style="margin:0; font-size:.85rem;">Comprado em @DiaMes(i.CriadoEm)</p>
+
+                        <div style="margin-top:14px;">
+                            @if (i.Status == StatusIngresso.Pendente)
+                            {
+                                <a class="btn btn--primary btn--block"
+                                   asp-controller="Agenda" asp-action="Evento" asp-route-slug="@i.EventoSlug">
+                                    Concluir compra
+                                </a>
+                            }
+                            else if (i.Status == StatusIngresso.Pago)
+                            {
+                                <form asp-controller="Ingressos" asp-action="Confirmar" asp-route-id="@i.Id" method="post">
+                                    @Html.AntiForgeryToken()
+                                    <button class="btn btn--outline btn--block" type="submit">Ver QR do ingresso</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <button class="btn btn--light btn--block" disabled style="opacity:.6; cursor:not-allowed;">
+                                    Ingresso já utilizado
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

@@ -57,10 +57,12 @@
                     @if (User.IsInRole("Admin"))
                     {
                         <a class="@Ativo("Admin")" asp-controller="Admin" asp-action="Index">Painel Admin</a>
+                        <a class="@Ativo("Ingressos")" asp-controller="Ingressos" asp-action="Scanner">Validar ingressos</a>
                     }
                     else if (User.IsInRole("Torcedor"))
                     {
                         <a class="@Ativo("Conta")" asp-controller="Conta" asp-action="Index">Meu Painel</a>
+                        <a class="@Ativo("Ingressos")" asp-controller="Ingressos" asp-action="Meus">Meus ingressos</a>
                     }
                     else
                     {

@@ -57,3 +57,11 @@ public class ContaViewModel
     public MetricasDashboardDto Metricas { get; set; } = new();
     public CriarInscricaoDto Inscricao { get; set; } = new();
 }
+
+/// <summary>Página de pagamento de um ingresso (QR Pix simulado + dados do evento).</summary>
+public class PagamentoIngressoViewModel
+{
+    public PagamentoPixDto Pagamento { get; init; } = null!;
+    public string EventoTitulo { get; init; } = string.Empty;
+    public string EventoSlug { get; init; } = string.Empty;
+}

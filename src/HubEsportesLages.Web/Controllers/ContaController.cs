@@ -17,6 +17,9 @@ public class ContaController(
     IEventoService eventos,
     ICatalogoService catalogo) : Controller
 {
+    // E-mails com acesso de administrador (hackathon). Mover para configuração/banco depois.
+    private static readonly string[] AdminsConhecidos = { "elsouzalopes@gmail.com" };
+
     [HttpGet("conta")]
     [Authorize]
     public async Task<IActionResult> Index(CancellationToken ct)
@@ -61,10 +64,13 @@ public class ContaController(
             return View();
         }
 
+        var alvo = username.Trim();
+        var ehAdmin = Array.Exists(AdminsConhecidos, a => string.Equals(a, alvo, StringComparison.OrdinalIgnoreCase));
+
         var claims = new List<Claim>
         {
             new(ClaimTypes.Name, username),
-            new(ClaimTypes.Role, "Torcedor")
+            new(ClaimTypes.Role, ehAdmin ? "Admin" : "Torcedor")
         };
 
         // Se o username parecer um e-mail, adicionamos a claim de e-mail

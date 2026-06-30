@@ -88,4 +88,13 @@ public static class MapeamentoExtensions
 
     public static MensagemDto ParaDto(this MensagemTorcida m) => new(
         m.Id, m.Autor, m.Texto, m.CriadoEm);
+
+    public static IngressoDto ParaDto(this Ingresso i) => new(
+        i.Id,
+        i.Evento?.Titulo ?? string.Empty,
+        i.Evento?.Slug ?? string.Empty,
+        i.Preco,
+        i.Status,
+        i.CriadoEm,
+        i.PagoEm);
 }

@@ -1,0 +1,38 @@
+@model PagamentoIngressoViewModel
+@{
+    ViewData["Title"] = "Pagamento do ingresso";
+    var pix = Model.Pagamento;
+}
+
+<section class="detalhe-hero" style="background: linear-gradient(135deg, var(--azul-900), var(--verde));">
+    <div class="container">
+        <a asp-controller="Agenda" asp-action="Evento" asp-route-slug="@Model.EventoSlug" style="color:#d6e0ee; font-weight:600;">← Voltar para o evento</a>
+        <h1>Pagamento via Pix</h1>
+        <p class="lead" style="color:#e6f4ec; margin:0;">@Model.EventoTitulo</p>
+    </div>
+</section>
+
+<section class="section--tight">
+    <div class="container" style="max-width:560px;">
+        <div class="painel ingresso-qr-card">
+            <span class="badge badge--pago">Pagamento simulado</span>
+            <h3 style="margin:14px 0 4px;">Escaneie para pagar</h3>
+            <p class="muted" style="margin-top:0;">Valor: <strong>@Moeda(pix.Valor)</strong></p>
+
+            <div class="qr-box">
+                <img src="data:image/png;base64,@pix.QrPagamentoBase64" alt="QR Pix do ingresso" width="240" height="240" />
+            </div>
+
+            <label class="rot" style="display:block; margin-bottom:6px;">Pix copia e cola</label>
+            <textarea class="pix-copia" readonly rows="3" onclick="this.select()">@pix.PixCopiaECola</textarea>
+
+            <form asp-controller="Ingressos" asp-action="Confirmar" asp-route-id="@pix.IngressoId" method="post" style="margin-top:18px;">
+                @Html.AntiForgeryToken()
+                <button class="btn btn--primary btn--block" type="submit">Já paguei (simulado)</button>
+            </form>
+            <p class="muted" style="margin:12px 0 0; font-size:.82rem;">
+                Em produção, a confirmação chegaria automaticamente pelo provedor Pix (webhook).
+            </p>
+        </div>
+    </div>
+</section>
