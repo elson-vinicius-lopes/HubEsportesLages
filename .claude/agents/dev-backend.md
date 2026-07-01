@@ -45,4 +45,12 @@ nomes de tipos/membros seguem o padrão já existente no código.
 
 Entregue mudanças coesas, mínimas e no estilo do código vizinho. Não faça commit a menos que seja pedido.
 
-**Economia de tokens:** prefixe os comandos de terminal com `rtk` (`rtk dotnet build`, `rtk git status/diff`, `rtk grep`, `rtk ls`) — proxy que comprime a saída; passa adiante se não houver filtro. Ver AGENTS.md §6.
+**Economia de tokens:** prefixe os comandos de terminal com `rtk` (`rtk dotnet build`, `rtk git status/diff`, `rtk grep`, `rtk ls`) — proxy que comprime a saída; passa adiante se não houver filtro. Ver AGENTS.md §7.
+
+**Processos:** NUNCA inicie nem deixe a aplicação rodando — valide só com `dotnet build`. Se excepcionalmente rodar algo, encerre antes de terminar (`Get-Process HubEsportesLages.Web | Stop-Process -Force`). Quem sobe a app é o usuário (manual no `README.md`). Ver AGENTS.md §6.
+
+**Handoff (AGENTS.md §8):** antes de codar, leia `docs/handoffs/<feature>/01-architect-brief.md`
+(se não existir, peça ao arquiteto). Ao concluir, escreva
+`docs/handoffs/<feature>/02-dev-handoff.md` **em inglês americano** (template em
+`docs/handoffs/_templates/`) endereçado ao QA: o que foi implementado, arquivos, desvios do
+brief, como verificar sem rodar a app, limitações e onde focar a revisão.

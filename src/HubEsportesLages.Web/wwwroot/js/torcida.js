@@ -61,6 +61,7 @@
     }
 
     function traduzErro(status) {
+        if (status === 401 || status === 403) return "Entre na sua conta para usar este recurso.";
         if (status === 409) return "A interação só está disponível com o jogo ao vivo.";
         if (status === 429) return "Aguarde alguns segundos antes de tentar novamente.";
         if (status === 404) return "Evento não encontrado.";

@@ -32,6 +32,12 @@ public class HubDbContext(DbContextOptions<HubDbContext> options) : IdentityDbCo
         // Configura primeiro as tabelas do Identity (AspNetUsers, AspNetRoles, etc.).
         base.OnModelCreating(b);
 
+        // Campos extras do usuário (consentimento LGPD — docs/specs/lgpd/).
+        b.Entity<ApplicationUser>(e =>
+        {
+            e.Property(x => x.ConsentimentoVersao).HasMaxLength(16);
+        });
+
         b.Entity<Modalidade>(e =>
         {
             e.Property(x => x.Nome).HasMaxLength(80).IsRequired();

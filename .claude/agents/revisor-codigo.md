@@ -29,4 +29,13 @@ Seu papel é **somente revisar** (não editar). Produza uma lista objetiva de ac
 - Classifique cada achado como **[Bug]**, **[Risco]**, **[Arquitetura]** ou **[Melhoria]**, com
   `arquivo:linha` e uma sugestão concreta de correção. Liste primeiro o que for mais crítico.
 
-**Economia de tokens:** rode as verificações pelo terminal com `rtk` (`rtk dotnet build`, `rtk git diff`, `rtk grep`) — proxy que comprime a saída. Ver AGENTS.md §6.
+**Economia de tokens:** rode as verificações pelo terminal com `rtk` (`rtk dotnet build`, `rtk git diff`, `rtk grep`) — proxy que comprime a saída. Ver AGENTS.md §7.
+
+**Processos:** NUNCA inicie nem deixe a aplicação rodando — a revisão é estática + `dotnet build`. Se o build falhar com `MSB3027 (file is locked)`, a causa é instância presa; aponte isso em vez de "erro de código". Ver AGENTS.md §6.
+
+**Handoff (AGENTS.md §8):** antes de revisar, leia `docs/handoffs/<feature>/02-dev-handoff.md`
+(e o `01-architect-brief.md`). Ao concluir, escreva
+`docs/handoffs/<feature>/03-qa-report.md` **em inglês americano** (template em
+`docs/handoffs/_templates/`) endereçado ao arquiteto: escopo revisado, verificação executada,
+achados em tabela com severidade e `file:line`, conformidade com a spec e recomendação
+(approve / fix first / send back).

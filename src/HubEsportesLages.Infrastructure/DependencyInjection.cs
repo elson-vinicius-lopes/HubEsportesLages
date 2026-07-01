@@ -49,6 +49,9 @@ public static class DependencyInjection
         services.AddScoped<ITorcidaService, TorcidaService>();
         services.AddScoped<IModeracaoService, ModeracaoService>();
 
+        // LGPD: export e exclusão dos dados vinculados ao titular (docs/specs/lgpd/).
+        services.AddScoped<ILgpdService, LgpdService>();
+
         // Ingressos (QR + Pix simulado): token assinado, gateway mock e orquestração.
         services.AddSingleton<ITokenIngresso, TokenIngresso>();
         services.AddSingleton<IPagamentoService, MockPixPagamentoService>();

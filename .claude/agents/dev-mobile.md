@@ -35,3 +35,8 @@ no projeto `HubEsportesLages.Web`.
 - Mantenha o app desacoplado da camada de dados; toda comunicação passa pela API.
 
 Entregue telas responsivas, com estados de carregando/vazio/erro, e textos em pt-BR.
+
+**Economia de tokens:** prefixe comandos de terminal com `rtk`. Ver AGENTS.md §7.
+**Processos:** NUNCA deixe app/emulador rodando ao terminar — valide com `dotnet build`. Ver AGENTS.md §6.
+**Handoff (AGENTS.md §8):** leia o `01-architect-brief.md` antes de codar; escreva o
+`02-dev-handoff.md` **em inglês americano** ao concluir (templates em `docs/handoffs/_templates/`).

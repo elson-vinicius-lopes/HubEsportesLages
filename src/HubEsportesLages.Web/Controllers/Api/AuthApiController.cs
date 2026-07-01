@@ -1,3 +1,4 @@
+using HubEsportesLages.Application.Common;
 using HubEsportesLages.Infrastructure.Identidade;
 using HubEsportesLages.Web.Identidade;
 using Microsoft.AspNetCore.Identity;
@@ -64,7 +65,8 @@ public class AuthApiController(
 
     /// <summary>
     /// Registra uma nova conta de torcedor (espelha o registro do site) e já devolve o token.
-    /// A política de senha forte do Identity é validada aqui.
+    /// A política de senha forte do Identity é validada aqui. Exige o aceite da Política de
+    /// Privacidade (LGPD): <c>aceitePrivacidade: true</c> — a política está em /privacidade.
     /// </summary>
     [HttpPost("registrar")]
     [ProducesResponseType(typeof(LoginRespostaDto), StatusCodes.Status200OK)]
@@ -74,11 +76,18 @@ public class AuthApiController(
         if (dto is null || string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Senha))
             return BadRequest(new { mensagem = "Informe e-mail e senha." });
 
+        // LGPD: sem o aceite explícito da Política de Privacidade não há cadastro.
+        if (!dto.AceitePrivacidade)
+            return BadRequest(new { mensagem = "É preciso aceitar a Política de Privacidade (/privacidade) para criar a conta." });
+
         var usuario = new ApplicationUser
         {
             UserName = dto.Email.Trim(),
             Email = dto.Email.Trim(),
-            NomeCompleto = string.IsNullOrWhiteSpace(dto.Nome) ? null : dto.Nome.Trim()
+            NomeCompleto = string.IsNullOrWhiteSpace(dto.Nome) ? null : dto.Nome.Trim(),
+            // Registro do consentimento LGPD (momento UTC + versão da política aceita).
+            ConsentimentoLgpdEm = DateTime.UtcNow,
+            ConsentimentoVersao = LgpdConstantes.VersaoPoliticaAtual
         };
 
         var criado = await userManager.CreateAsync(usuario, dto.Senha);
@@ -135,8 +144,11 @@ public class AuthApiController(
 /// <summary>Credenciais de login da API (JSON camelCase).</summary>
 public record LoginRequisicaoDto(string Email, string Senha);
 
-/// <summary>Dados de registro de um novo torcedor pela API (JSON camelCase).</summary>
-public record RegistrarRequisicaoDto(string Nome, string Email, string Senha);
+/// <summary>
+/// Dados de registro de um novo torcedor pela API (JSON camelCase).
+/// <paramref name="AceitePrivacidade"/> deve ser <c>true</c> (aceite da Política de Privacidade — LGPD).
+/// </summary>
+public record RegistrarRequisicaoDto(string Nome, string Email, string Senha, bool AceitePrivacidade);
 
 /// <summary>Resposta com o token JWT emitido e os dados básicos do usuário.</summary>
 public record LoginRespostaDto(string Token, DateTime ExpiraEm, string Nome, IReadOnlyList<string> Roles);

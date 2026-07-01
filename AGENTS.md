@@ -84,7 +84,18 @@ MCP é opcional e configurado em cada IDE separadamente, com servidores equivale
 Adote MCP só quando houver um servidor que traga valor real (ex.: issues do GitHub/GitLab).
 Nunca commite tokens — use variáveis de ambiente nos campos `env`.
 
-## 6. Economia de tokens — use o `rtk` (Rust Token Killer)
+## 6. Processos — NUNCA deixar a aplicação rodando (agentes de IA)
+**Agentes de IA (Claude Code etc.) não devem iniciar nem deixar a aplicação em execução.**
+Quem sobe a app é o **usuário**, seguindo o manual do `README.md` ("Como executar").
+
+- Agente valida com **`dotnet build`** (nunca `dotnet run` pendurado). Se um teste de runtime for
+  imprescindível e autorizado, **encerre o processo antes de terminar o turno**:
+  `Get-Process HubEsportesLages.Web -ErrorAction SilentlyContinue | Stop-Process -Force`.
+- Processo pendurado trava as DLLs (`MSB3027/MSB3021 "file is locked"`) e a porta 5210 — o build
+  do usuário falha como se fosse erro de código.
+- Se o build falhar com lock, a causa é instância em execução: encerrá-la é a correção.
+
+## 7. Economia de tokens — use o `rtk` (Rust Token Killer)
 Para reduzir o consumo de tokens, **prefixe os comandos de terminal com `rtk`** — um proxy que filtra e
 comprime a saída antes de chegar ao LLM. Se não houver filtro para um comando, o `rtk` o repassa sem
 alterar, então é **sempre seguro**. Vale para build, testes, git, busca e leitura:
@@ -98,3 +109,17 @@ rtk grep "<padrão>" # rtk ls | find | read
 Em cadeias com `&&`, prefixe **cada** comando (`rtk git add . && rtk git commit -m "..."`). Referência
 completa dos subcomandos no bloco `<!-- rtk-instructions -->` do `CLAUDE.md`. Binário em
 `%LOCALAPPDATA%\rtk` (no PATH do usuário).
+
+## 8. Idioma da documentação e protocolo de handoff
+**Toda documentação de engenharia nova é escrita em inglês americano (en-US)** — handoffs,
+specs novas, relatórios, ADRs. Isso padroniza a escrita entre os papéis atuais (architect,
+dev, qa) e os futuros (PM, analista, scrum master).
+
+- **Permanecem em pt-BR:** textos de interface do produto (UI), identificadores de domínio e
+  comentários de código (linguagem ubíqua do produto), e as specs pt-BR existentes até serem
+  migradas.
+- **Protocolo de handoff** (obrigatório por feature): `docs/handoffs/README.md`.
+  Cadeia: Architect → `01-architect-brief.md` → Dev → `02-dev-handoff.md` → QA →
+  `03-qa-report.md` → Architect. Templates em `docs/handoffs/_templates/`.
+  Nenhum papel inicia trabalho sem ler o documento endereçado a ele; nenhum papel encerra
+  sem escrever o documento do próximo.

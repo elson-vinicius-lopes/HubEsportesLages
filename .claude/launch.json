@@ -10,9 +10,13 @@
         "src/HubEsportesLages.Web/HubEsportesLages.Web.csproj",
         "--no-launch-profile",
         "--urls",
-        "http://localhost:5210"
+        "http://0.0.0.0:5210"
       ],
-      "port": 5210
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "port": 5210,
+      "autoPort": false
     }
   ]
 }

@@ -1,3 +1,4 @@
+using HubEsportesLages.Application.Common;
 using HubEsportesLages.Application.DTOs;
 using HubEsportesLages.Application.Interfaces;
 using HubEsportesLages.Infrastructure.Identidade;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace HubEsportesLages.Web.Controllers;
 
@@ -18,8 +20,12 @@ public class ContaController(
     SignInManager<ApplicationUser> signInManager,
     IEmailService emailService,
     IEventoService eventos,
-    ICatalogoService catalogo) : Controller
+    ICatalogoService catalogo,
+    ILgpdService lgpd) : Controller
 {
+    /// <summary>Opções de serialização do export LGPD: camelCase (padrão da API) e indentado para leitura.</summary>
+    private static readonly JsonSerializerOptions OpcoesJsonExport = new(JsonSerializerDefaults.Web) { WriteIndented = true };
+
     [HttpGet("conta")]
     [Authorize]
     public async Task<IActionResult> Index(CancellationToken ct)
@@ -103,7 +109,7 @@ public class ContaController(
 
     [HttpPost("conta/registrar")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Registrar(string nome, string email, string senha, string confirmarSenha, CancellationToken ct)
+    public async Task<IActionResult> Registrar(string nome, string email, string senha, string confirmarSenha, bool aceitePrivacidade, CancellationToken ct)
     {
         if (string.IsNullOrWhiteSpace(nome))
             ModelState.AddModelError(string.Empty, "Informe seu nome completo.");
@@ -114,6 +120,10 @@ public class ContaController(
         if (senha != confirmarSenha)
             ModelState.AddModelError(string.Empty, "As senhas não coincidem.");
 
+        // LGPD: o aceite da Política de Privacidade é obrigatório para criar a conta.
+        if (!aceitePrivacidade)
+            ModelState.AddModelError(string.Empty, "Para criar a conta é preciso ler e aceitar a Política de Privacidade.");
+
         if (!ModelState.IsValid)
             return View();
 
@@ -121,7 +131,10 @@ public class ContaController(
         {
             UserName = email.Trim(),
             Email = email.Trim(),
-            NomeCompleto = nome.Trim()
+            NomeCompleto = nome.Trim(),
+            // Registro do consentimento LGPD (momento UTC + versão da política aceita).
+            ConsentimentoLgpdEm = DateTime.UtcNow,
+            ConsentimentoVersao = LgpdConstantes.VersaoPoliticaAtual
         };
 
         // A política de senha forte é validada pelo Identity em CreateAsync.
@@ -159,6 +172,83 @@ public class ContaController(
     {
         await signInManager.SignOutAsync();
         return RedirectToAction("Index", "Home");
+    }
+
+    /// <summary>
+    /// LGPD — direito de acesso/portabilidade: baixa em JSON os dados vinculados à conta
+    /// (cadastro + consentimento, inscrições de alerta e ingressos). As interações de
+    /// torcida usam o TorcedorId anônimo do navegador e não são vinculáveis à conta.
+    /// </summary>
+    [HttpGet("conta/meus-dados")]
+    [Authorize]
+    public async Task<IActionResult> MeusDados(CancellationToken ct)
+    {
+        var usuario = await userManager.GetUserAsync(User);
+        if (usuario is null)
+            return Challenge();
+
+        var email = usuario.Email ?? usuario.UserName ?? string.Empty;
+
+        var dados = new MeusDadosDto(
+            GeradoEm: DateTime.UtcNow,
+            Conta: new ContaTitularDto(usuario.NomeCompleto, email, usuario.ConsentimentoLgpdEm, usuario.ConsentimentoVersao),
+            InscricoesAlerta: await lgpd.ListarInscricoesDoTitularAsync(email, ct),
+            Ingressos: await lgpd.ListarIngressosDoTitularAsync(email, ct),
+            ObservacaoTorcida: "As interações de torcida (votos de MVP, enquetes, mural e equipes favoritas) "
+                + "são registradas sob um identificador anônimo gerado no seu navegador, sem vínculo com esta conta, "
+                + "e por isso não aparecem neste arquivo. Detalhes em /privacidade.");
+
+        var json = JsonSerializer.SerializeToUtf8Bytes(dados, OpcoesJsonExport);
+        return File(json, "application/json", "meus-dados-bora-pro-jogo.json");
+    }
+
+    /// <summary>
+    /// LGPD — direito de exclusão: mediante confirmação da senha, apaga as inscrições de
+    /// alerta, anonimiza os ingressos (registros contábeis mantidos) e exclui a conta.
+    /// O último Admin do sistema não pode se autoexcluir.
+    /// </summary>
+    [HttpPost("conta/excluir")]
+    [Authorize]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Excluir(string senha, CancellationToken ct)
+    {
+        var usuario = await userManager.GetUserAsync(User);
+        if (usuario is null)
+            return Challenge();
+
+        if (string.IsNullOrWhiteSpace(senha) || !await userManager.CheckPasswordAsync(usuario, senha))
+        {
+            TempData["ExclusaoErro"] = "Senha incorreta — nenhum dado foi excluído.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Guarda: o único Admin não pode se excluir, senão o hub fica sem administração.
+        if (await userManager.IsInRoleAsync(usuario, "Admin"))
+        {
+            var admins = await userManager.GetUsersInRoleAsync("Admin");
+            if (admins.Count <= 1)
+            {
+                TempData["ExclusaoErro"] = "Você é o único administrador do hub. Promova outro administrador antes de excluir sua conta.";
+                return RedirectToAction(nameof(Index));
+            }
+        }
+
+        var email = usuario.Email ?? usuario.UserName ?? string.Empty;
+
+        // Apaga inscrições e anonimiza ingressos ANTES de remover a conta Identity.
+        await lgpd.ApagarDadosVinculadosAsync(email, ct);
+
+        var resultado = await userManager.DeleteAsync(usuario);
+        if (!resultado.Succeeded)
+        {
+            TempData["ExclusaoErro"] = "Não foi possível excluir a conta. Tente novamente ou fale com contato@hubesporteslages.sc.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        await signInManager.SignOutAsync();
+
+        TempData["RegistroOk"] = "Sua conta e seus dados pessoais foram excluídos. Sentiremos sua falta na torcida!";
+        return RedirectToAction(nameof(Login));
     }
 
     /// <summary>Traduz as mensagens de erro do Identity para português.</summary>

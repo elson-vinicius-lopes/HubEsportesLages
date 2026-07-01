@@ -205,6 +205,48 @@
             </div>
 
             <aside>
+                <!-- ── PRIVACIDADE E DADOS (LGPD) ── -->
+                <div class="painel" style="margin-bottom: 18px;">
+                    <h3>Privacidade e meus dados</h3>
+                    <p class="muted" style="margin-top:-4px;">
+                        Seus direitos como titular (LGPD). Detalhes na
+                        <a href="/privacidade">Política de Privacidade</a>.
+                    </p>
+
+                    @if (TempData["ExclusaoErro"] is string erroExclusao)
+                    {
+                        <div class="alerta" style="background: rgba(220, 38, 38, 0.12); border: 1.5px solid var(--vermelho);">⚠️ @erroExclusao</div>
+                    }
+
+                    <a class="btn btn--outline btn--block" href="/conta/meus-dados" style="margin-bottom: 12px;">
+                        ⬇️ Exportar meus dados (JSON)
+                    </a>
+
+                    <details>
+                        <summary style="cursor: pointer; color: var(--vermelho); font-weight: 600; font-size: 0.9rem;">
+                            Excluir minha conta
+                        </summary>
+                        <form asp-action="Excluir" asp-controller="Conta" method="post" class="form-grid" style="margin-top: 10px;">
+                            @Html.AntiForgeryToken()
+                            <p class="muted col-full" style="font-size:.8rem; margin:0;">
+                                Ação permanente: apaga suas inscrições de alerta, anonimiza seus ingressos
+                                (registros contábeis são mantidos sem seu nome) e remove sua conta.
+                            </p>
+                            <div class="campo col-full">
+                                <label for="senhaExclusao">Confirme sua senha</label>
+                                <input type="password" id="senhaExclusao" name="senha" required placeholder="Sua senha atual" />
+                            </div>
+                            <div class="col-full">
+                                <button class="btn btn--block" type="submit"
+                                        style="background: var(--vermelho); color: #fff;"
+                                        onclick="return confirm('Tem certeza? A exclusão da conta é permanente.');">
+                                    Excluir minha conta definitivamente
+                                </button>
+                            </div>
+                        </form>
+                    </details>
+                </div>
+
                 <div class="painel">
                     <h3>Próximos eventos da agenda</h3>
                     <div class="feed">

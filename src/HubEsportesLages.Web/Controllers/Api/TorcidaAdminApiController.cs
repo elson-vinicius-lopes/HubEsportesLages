@@ -1,6 +1,7 @@
 using HubEsportesLages.Application.Common;
 using HubEsportesLages.Application.DTOs;
 using HubEsportesLages.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HubEsportesLages.Web.Controllers.Api;
@@ -8,8 +9,10 @@ namespace HubEsportesLages.Web.Controllers.Api;
 /// <summary>
 /// Operações da organização sobre a interação da torcida: definição da escalação
 /// (candidatos a MVP), cadastro de enquete e moderação do mural.
+/// Restrito à role Admin (cookie do site ou JWT Bearer).
 /// </summary>
 [ApiController]
+[Authorize(Roles = "Admin")]
 [Route("api/eventos/{eventoId:int}/torcida")]
 [Produces("application/json")]
 [Tags("Torcida (organização)")]

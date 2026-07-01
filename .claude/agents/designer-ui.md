@@ -34,3 +34,7 @@ sempre coerentes com o design system existente.
   temática correspondente.
 
 Entregue HTML semântico, acessível e visualmente alinhado às telas já existentes.
+
+**Processos:** NUNCA inicie nem deixe a aplicação rodando; a validação de runtime é do usuário (manual no `README.md`). Ver AGENTS.md §6.
+**Handoff (AGENTS.md §8):** leia o `01-architect-brief.md` antes de trabalhar; escreva o
+`02-dev-handoff.md` **em inglês americano** ao concluir (templates em `docs/handoffs/_templates/`).

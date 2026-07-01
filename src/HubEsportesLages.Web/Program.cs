@@ -63,6 +63,14 @@ builder.Services.ConfigureApplicationCookie(options =>
     {
         OnRedirectToLogin = context =>
         {
+            // Chamadas de API não autenticadas recebem 401 (JSON/fetch), nunca o HTML de login —
+            // senão o fetch do torcida.js interpretaria a página de login (200) como sucesso.
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            }
+
             var returnUrl = context.Request.Path + context.Request.QueryString;
             if (context.Request.Path.StartsWithSegments("/admin"))
             {
@@ -76,6 +84,13 @@ builder.Services.ConfigureApplicationCookie(options =>
         },
         OnRedirectToAccessDenied = context =>
         {
+            // Mesma regra para falta de permissão em /api: responde 403 em vez de redirecionar.
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                return Task.CompletedTask;
+            }
+
             if (context.Request.Path.StartsWithSegments("/admin"))
             {
                 context.Response.Redirect("/admin/login");

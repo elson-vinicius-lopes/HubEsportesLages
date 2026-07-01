@@ -1,72 +1,98 @@
-# Hub Esportes Lages
+# Bora pro Jogo (Hub Esportes Lages)
 
-Hub central de **agenda e notificações dos esportes de Lages/SC**. Reúne em um só lugar os jogos,
-corridas e competições de todas as modalidades da cidade, com **resultados**, **feed de
-notificações** e **inscrição** do torcedor para receber alertas da sua equipe.
+Central de **agenda, notificações e experiência do torcedor** dos esportes de Lages/SC.
+Agenda com filtros, resultados, feed de notificações, **torcida ao vivo** (MVP, enquete, mural,
+favoritar), **ingresso pago com QR-Code** (Pix simulado) validado pelo admin, painel administrativo,
+autenticação **ASP.NET Identity** (senha forte + roles) e **API REST com JWT** para o app mobile.
 
-Projeto desenvolvido para o **HackathOrion** (desafio *“Melhorar a experiência do torcedor nos
-eventos esportivos de Lages”*), inspirado no padrão de portais como
-[eventooficial.com.br](https://www.eventooficial.com.br/eventos) e
-[esportecuritibanos.sc.gov.br](https://esportecuritibanos.sc.gov.br/).
-
----
-
-## Funcionalidades
-
-- **Agenda esportiva** com filtros por modalidade, local, período (hoje / semana / mês) e busca textual, além de paginação.
-- **Página de evento** com confronto, placar, local + link para o Google Maps, ingresso e descrição.
-- **Resultados** dos eventos já encerrados (placares e súmulas).
-- **Feed central de notificações** — novos eventos, lembretes, alterações e resultados.
-- **Inscrição do torcedor** para receber alertas (geral, por modalidade ou por equipe).
-- **Área do organizador** para publicar novos eventos (dispara notificação automática).
-- **Lembretes automáticos** gerados em segundo plano para eventos que começam nas próximas 24h.
-- **API REST** documentada com **Swagger** (`/swagger`).
-- **Jogos ao vivo** com destaque visual (status *AO VIVO* pulsante).
+Projeto do **HackathOrion** (desafio *"Melhorar a experiência do torcedor nos eventos esportivos
+de Lages"*). Specs em `docs/` (Spec-Driven Development — ver `AGENTS.md`).
 
 ---
 
 ## Arquitetura
 
-Solução em **.NET 10** seguindo *Clean Architecture* (4 projetos):
+Solução **.NET 10** em *Clean Architecture* (`HubEsportesLages.slnx`):
 
-```
-HubEsportesLages.slnx
-└── src/
-    ├── HubEsportesLages.Domain          # Entidades e enums (sem dependências)
-    ├── HubEsportesLages.Application      # DTOs, interfaces de serviço, mapeamentos
-    ├── HubEsportesLages.Infrastructure   # EF Core + SQLite, serviços, seed de dados
-    └── HubEsportesLages.Web              # MVC (site) + API REST + Swagger + worker
-```
-
-| Camada | Responsabilidade |
+| Projeto | Responsabilidade |
 |---|---|
-| **Domain** | `Evento`, `Modalidade`, `Equipe`, `Local`, `Inscricao`, `Notificacao` e enums. |
-| **Application** | Contratos (`IEventoService`, `ICatalogoService`, `IInscricaoService`, `INotificacaoService`), DTOs e filtros. |
-| **Infrastructure** | `HubDbContext` (SQLite), implementação dos serviços, `DataSeeder` e injeção de dependência. |
-| **Web** | Controllers MVC + API, views Razor, design system próprio (CSS) e `NotificacaoLembreteWorker`. |
+| `src/HubEsportesLages.Domain` | Entidades e enums (Evento, Equipe, Ingresso, votos da torcida…) |
+| `src/HubEsportesLages.Application` | DTOs, interfaces de serviço, mapeamentos |
+| `src/HubEsportesLages.Infrastructure` | **EF Core 10 + PostgreSQL (Npgsql)**, Identity, serviços, Migrations, seed |
+| `src/HubEsportesLages.Web` | MVC (site) + API REST + Swagger + Serilog + worker de lembretes |
 
-**Stack:** ASP.NET Core MVC, Entity Framework Core 10 (SQLite), Swagger (Swashbuckle), Razor + CSS próprio (sem dependência de build de front-end).
+**Stack:** ASP.NET Core MVC · PostgreSQL 16 (WSL) · ASP.NET Identity (hash, lockout, roles) ·
+JWT Bearer (API/mobile) · Serilog (console + `logs/`) · QRCoder · Razor + CSS próprio (sem build front-end).
 
 ---
 
-## Como executar
+## ▶️ Como executar (manual completo)
 
-Pré-requisito: **.NET SDK 10**.
+> ⚠️ **Regra do repositório:** agentes de IA **não** sobem a aplicação (ver `AGENTS.md` §6).
+> Quem executa é você, seguindo este manual.
 
-```bash
-dotnet run --project src/HubEsportesLages.Web
+### Pré-requisitos (uma vez)
+1. **.NET SDK 10** — `dotnet --version` deve mostrar `10.x`.
+2. **WSL2 + Ubuntu 24.04** — `wsl --install -d Ubuntu-24.04 --no-launch` (se ainda não tiver).
+3. **PostgreSQL no WSL** — o script do repo instala/configura tudo (db `hubesportes`, user `postgres`, senha `hub`):
+   ```powershell
+   wsl -d Ubuntu-24.04 -u root -- bash /mnt/c/Users/elson.lopes/source/repos/hubesporteslages/scripts/wsl-postgres-setup.sh
+   ```
+
+### Passo 1 — Subir o banco (a cada sessão)
+O WSL **hiberna quando ocioso** e desliga o Postgres junto. Abra um terminal e **deixe este comando rodando**
+(ele inicia o Postgres e mantém o WSL vivo):
+```powershell
+wsl -d Ubuntu-24.04 -u root -- bash -c "service postgresql start; echo POSTGRES_UP; tail -f /dev/null"
 ```
 
-Na primeira execução o banco SQLite (`hubesportes.db`) é criado e populado automaticamente com um
-cenário demonstrativo da cena esportiva de Lages (modalidades, locais, equipes e uma agenda com
-eventos passados, ao vivo e futuros — com datas relativas ao dia da execução).
+### Passo 2 — Subir a aplicação
+Em **outro** terminal, na raiz do repositório:
+```powershell
+dotnet run --project src/HubEsportesLages.Web --no-launch-profile --urls http://0.0.0.0:5210
+```
+Na primeira execução, as **Migrations criam o schema** no Postgres e o **seed** popula o cenário
+demo (modalidades, locais, equipes, agenda com jogo ao vivo, enquete, escalação).
 
-Acesse no navegador:
+### Passo 3 — Acessar
+| O quê | Onde |
+|---|---|
+| Site (nesta máquina) | http://localhost:5210 |
+| Site (celular na mesma Wi-Fi) | http://SEU-IP-WIFI:5210 (ex.: `ipconfig` → IPv4 do Wi-Fi) |
+| API / Swagger | http://localhost:5210/swagger |
+| **Login admin (dev)** | `elsouzalopes@gmail.com` / `Admin@Lages2026` |
 
-- **Site:** a URL exibida no console (ex.: `http://localhost:5210`)
-- **API / Swagger:** `/swagger`
+Novos cadastros entram como **Torcedor** (senha forte obrigatória: 8+, maiúscula, minúscula, número, especial).
 
-> Para fixar a porta: `dotnet run --project src/HubEsportesLages.Web --urls http://localhost:5210`
+### API com JWT (app mobile)
+```bash
+curl -X POST http://localhost:5210/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"elsouzalopes@gmail.com","senha":"Admin@Lages2026"}'
+# → { "token": "...", ... }  → use nas chamadas: Authorization: Bearer <token>
+```
+
+### Encerrar
+`Ctrl+C` no terminal da aplicação e no do banco. Se algo ficar preso:
+```powershell
+Get-Process HubEsportesLages.Web -ErrorAction SilentlyContinue | Stop-Process -Force
+```
+
+---
+
+## 🔧 Solução de problemas
+
+| Sintoma | Causa | Correção |
+|---|---|---|
+| Build falha com `MSB3027/MSB3021 "file is locked"` | Instância da app ainda rodando | `Get-Process HubEsportesLages.Web \| Stop-Process -Force` e rebuild |
+| `Connection refused` no Postgres ao subir a app | WSL hibernou e levou o Postgres | Rode o **Passo 1** de novo (e deixe o terminal aberto) |
+| Porta 5210 ocupada | Outra instância na porta | Encerre-a (comando acima) — a porta 5210 é fixa (celular/QR) |
+| Resetar o banco (re-seed) | — | `wsl -d Ubuntu-24.04 -u root -- sudo -u postgres psql -c "DROP DATABASE hubesportes;" && wsl -d Ubuntu-24.04 -u root -- sudo -u postgres createdb hubesportes` e suba a app |
+
+### Variáveis de ambiente (produção)
+Nunca commite segredos. Em produção, configure:
+`ConnectionStrings__Default` · `Jwt__SecretKey` (≥32 chars) · `Ingressos__Segredo` ·
+`Admin__SenhaInicial` · `Email__Provedor=Resend` + `Resend__ApiKey` (para e-mail real; padrão é log).
 
 ---
 
@@ -74,35 +100,21 @@ Acesse no navegador:
 
 | Método | Rota | Descrição |
 |---|---|---|
-| `GET` | `/api/eventos` | Agenda (filtros: `Modalidade`, `LocalId`, `Busca`, `Periodo`, `Pagina`...) |
-| `GET` | `/api/eventos/resultados` | Eventos encerrados com placar |
-| `GET` | `/api/eventos/destaques` | Eventos em destaque |
-| `GET` | `/api/eventos/{slug}` | Detalhe de um evento |
-| `POST` | `/api/eventos` | Publica um novo evento |
-| `PUT` | `/api/eventos/{id}/resultado` | Atualiza placar/encerramento |
-| `GET` | `/api/notificacoes` | Feed de notificações |
-| `POST` | `/api/notificacoes/gerar-lembretes` | Gera lembretes das próximas 24h |
-| `POST` | `/api/inscricoes` | Inscreve um torcedor |
-| `GET` | `/api/catalogo/modalidades` \| `/locais` \| `/equipes` | Dados de apoio |
+| `POST` | `/api/auth/login` | Login → **JWT** (claims de role) |
+| `GET` | `/api/eventos` · `/resultados` · `/destaques` · `/{slug}` | Agenda/resultados/detalhe |
+| `GET/POST` | `/api/eventos/{slug}/torcida` (+ `/mvp`, `/enquete/{id}/voto`, `/mensagens`) | Torcida ao vivo |
+| `POST/DELETE` | `/api/favoritos/equipes/{id}` | Favoritar equipe |
+| `POST` | `/api/ingressos` · `/{id}/confirmar-pagamento` · `GET /meus` | Ingresso QR (Pix simulado) |
+| `POST` | `/api/ingressos/validar` | **Check-in pelo admin** (uso único) |
+| `GET` | `/api/catalogo/modalidades` · `/locais` · `/equipes` | Catálogo |
+| `GET` | `/api/notificacoes` · `POST /api/inscricoes` | Feed / inscrição de alertas |
 
-Exemplo:
-
-```bash
-curl http://localhost:5210/api/eventos?Modalidade=futsal&Periodo=Todos
-```
+JSON sempre **camelCase**. Interação da torcida usa o header `X-Torcedor-Id` (GUID do dispositivo).
 
 ---
 
-## Observações
-
-- Os **locais, equipes e jogos** do seed são **ilustrativos**, montados para demonstrar o produto.
-- O envio real de e-mail/push não está implementado — as inscrições e o feed simulam o canal de
-  notificação (ponto natural de evolução, integrando provedor de e-mail/Web Push/WhatsApp).
-- O banco é recriado a partir do seed apenas quando está vazio; apague `hubesportes.db` para resetar.
-
-## Próximos passos
-
-- Autenticação na área do organizador.
-- Envio real de notificações (e-mail / Web Push / WhatsApp) a partir das inscrições.
-- Check-in/ingresso digital com QR Code (entrada nos ginásios).
-- App PWA com notificações no celular.
+## Documentação (SDD)
+- `AGENTS.md` — acordo de trabalho canônico (regras para humanos e agentes de IA).
+- `docs/design-arena-lages.md` — spec do app mobile Arena Lages.
+- `docs/specs/<feature>/` — requisitos/design/tarefas por feature.
+- `docs/sdd-multi-ide.md` — SDD entre múltiplas IDEs de IA.
