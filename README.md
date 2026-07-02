@@ -49,8 +49,12 @@ wsl -d Ubuntu-24.04 -u root -- bash -c "service postgresql start; echo POSTGRES_
 ### Passo 2 — Subir a aplicação
 Em **outro** terminal, na raiz do repositório:
 ```powershell
-dotnet run --project src/HubEsportesLages.Web --no-launch-profile --urls http://0.0.0.0:5210
+dotnet run --project src/HubEsportesLages.Web --launch-profile lan
 ```
+> O perfil `lan` (em `Properties/launchSettings.json`) já define `ASPNETCORE_ENVIRONMENT=Development`
+> e a URL `http://0.0.0.0:5210`. **Não use `--no-launch-profile`** sem definir o ambiente: sem
+> `Development`, a app exige `Jwt__SecretKey` de produção e encerra com
+> *"Jwt:SecretKey não configurada"* (proteção intencional).
 Na primeira execução, as **Migrations criam o schema** no Postgres e o **seed** popula o cenário
 demo (modalidades, locais, equipes, agenda com jogo ao vivo, enquete, escalação).
 
@@ -65,11 +69,16 @@ demo (modalidades, locais, equipes, agenda com jogo ao vivo, enquete, escalaçã
 Novos cadastros entram como **Torcedor** (senha forte obrigatória: 8+, maiúscula, minúscula, número, especial).
 
 ### API com JWT (app mobile)
+**PowerShell** (atenção: `curl` no PowerShell é alias de `Invoke-WebRequest` e não aceita `-X/-H/-d`):
+```powershell
+$r = Invoke-RestMethod -Method Post -Uri http://localhost:5210/api/auth/login `
+     -ContentType "application/json" `
+     -Body '{"email":"elsouzalopes@gmail.com","senha":"Admin@Lages2026"}'
+$r.token   # use nas chamadas: -Headers @{ Authorization = "Bearer $($r.token)" }
+```
+**Bash / Git Bash / WSL** (ou `curl.exe` em uma linha no PowerShell):
 ```bash
-curl -X POST http://localhost:5210/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"elsouzalopes@gmail.com","senha":"Admin@Lages2026"}'
-# → { "token": "...", ... }  → use nas chamadas: Authorization: Bearer <token>
+curl -X POST http://localhost:5210/api/auth/login -H "Content-Type: application/json" -d '{"email":"elsouzalopes@gmail.com","senha":"Admin@Lages2026"}'
 ```
 
 ### Encerrar
@@ -86,6 +95,7 @@ Get-Process HubEsportesLages.Web -ErrorAction SilentlyContinue | Stop-Process -F
 |---|---|---|
 | Build falha com `MSB3027/MSB3021 "file is locked"` | Instância da app ainda rodando | `Get-Process HubEsportesLages.Web \| Stop-Process -Force` e rebuild |
 | `Connection refused` no Postgres ao subir a app | WSL hibernou e levou o Postgres | Rode o **Passo 1** de novo (e deixe o terminal aberto) |
+| App encerra com `Jwt:SecretKey não configurada` | Ambiente ≠ Development (ex.: `--no-launch-profile` sem env) | Use `--launch-profile lan`, ou `$env:ASPNETCORE_ENVIRONMENT="Development"` antes do `dotnet run` |
 | Porta 5210 ocupada | Outra instância na porta | Encerre-a (comando acima) — a porta 5210 é fixa (celular/QR) |
 | Resetar o banco (re-seed) | — | `wsl -d Ubuntu-24.04 -u root -- sudo -u postgres psql -c "DROP DATABASE hubesportes;" && wsl -d Ubuntu-24.04 -u root -- sudo -u postgres createdb hubesportes` e suba a app |
 
